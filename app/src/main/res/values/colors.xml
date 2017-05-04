@@ -60,5 +60,6 @@
     <color name="background_gray_light">#ffbababa</color>
 
     <color name="recover_screen_text">#f06292</color>
+    <color name="control_bar_bg">#e0222222</color>
 
 </resources>

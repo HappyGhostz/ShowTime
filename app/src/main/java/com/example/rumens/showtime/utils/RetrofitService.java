@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.rumens.showtime.api.IDouyuApi;
+import com.example.rumens.showtime.api.IDouyuVideoApi;
 import com.example.rumens.showtime.api.ILivesApi;
 import com.example.rumens.showtime.api.INewsApi;
 import com.example.rumens.showtime.api.IWelfareApi;
@@ -15,6 +16,7 @@ import com.example.rumens.showtime.api.bean.LiveDetailBean;
 import com.example.rumens.showtime.api.bean.LiveListItemBean;
 import com.example.rumens.showtime.api.bean.NewsDetailInfo;
 import com.example.rumens.showtime.api.bean.NewsInfo;
+import com.example.rumens.showtime.api.bean.OldLiveVideoInfo;
 import com.example.rumens.showtime.api.bean.PhotoInfo;
 import com.example.rumens.showtime.api.bean.PhotoSetInfo;
 import com.example.rumens.showtime.api.bean.SpecialInfo;
@@ -22,6 +24,10 @@ import com.example.rumens.showtime.api.bean.WelfarePhotoInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoList;
 import com.example.rumens.showtime.local.BeautyPhoto;
 import com.example.rumens.showtime.local.VideoInfo;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,11 +79,13 @@ public class RetrofitService {
     private static final String BASE_LIVE_URL = "http://api.maxjia.com";
     private static final String BASE_PANDA_URL = "http://www.panda.tv";
     private static final String BASE_DOUYU_URL = "http://capi.douyucdn.cn/api/v1/";
+    private static final String BASE_LIVE_DOUYU_VIDEO_URL ="http://coapi.douyucdn.cn/" ;
 
     private static INewsApi sNewsService;
     private static IWelfareApi sWelfareService;
     private static ILivesApi sLivesService;
     private static IDouyuApi sDouyuLivesService;
+    private static IDouyuVideoApi sDouyuLiveVideoService;
     // 递增页码
     private static final int INCREASE_PAGE = 20;
     private static Context mContext;
@@ -145,6 +153,15 @@ public class RetrofitService {
                 .baseUrl(BASE_DOUYU_URL)
                 .build();
         sDouyuLivesService = retrofit.create(IDouyuApi.class);
+
+        retrofit = new Retrofit.Builder()
+                .client(okHttpClient)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl(BASE_LIVE_DOUYU_VIDEO_URL)
+                .build();
+        sDouyuLiveVideoService = retrofit.create(IDouyuVideoApi.class);
 
 
     }
@@ -374,7 +391,34 @@ public class RetrofitService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(_flatMapVideo(videoId));
     }
-
+    /**
+     * 获取斗鱼直播房间详情列
+     * @return
+     */
+    public static Observable<OldLiveVideoInfo> getDouyuLiveVideoInfo(String roomId,String auth,String time){
+        return sDouyuLiveVideoService.getDouyuLiveVideo(roomId,0,"pcclient",auth,time)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+//    private static Request getRequest(String roomId) {
+//        /**
+//         * 房间加密处理
+//         */
+//        int time = (int)(System.currentTimeMillis() / 1000) ;
+//        String str = "lapi/live/thirdPart/getPlay/" + roomId + "?aid=pcclient&rate=0&time=" + time + "9TUk5fjjUjg9qIMH3sdnh";
+//        String auth = MD5Util.getToMd5Low32(str);
+////        L.e("地址为:"+NetWorkApi.baseUrl + NetWorkApi.getLiveVideo + room_id+"?"+tempParams.toString());
+//        Request requestPost = new Request.Builder()
+//                .url( "http://coapi.douyucdn.cn"+"/lapi/live/thirdPart/getPlay/"+ roomId + "?rate=0")
+//                .get()
+//                .addHeader("aid","pcclient")
+//                .addHeader("auth",auth)
+//                .addHeader("time",time+"")
+//                .build();
+//        return requestPost;
+//    }
 
 
     /******************************************* 转换器 **********************************************/

@@ -6,7 +6,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.example.rumens.showtime"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -93,4 +93,6 @@ dependencies {
     compile 'com.github.ctiao:DanmakuFlameMaster:0.6.2'
     // shine button
     compile 'com.sackcentury:shinebutton:0.1.6'
+    //    视频播放器
+    compile project(path: ':InitActivity')
 }

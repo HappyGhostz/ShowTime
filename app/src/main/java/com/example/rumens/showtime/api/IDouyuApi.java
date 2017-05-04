@@ -3,6 +3,7 @@ package com.example.rumens.showtime.api;
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;

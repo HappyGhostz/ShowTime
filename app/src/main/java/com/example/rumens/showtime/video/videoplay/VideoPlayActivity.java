@@ -3,11 +3,16 @@ package com.example.rumens.showtime.video.videoplay;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -19,9 +24,12 @@ import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.api.bean.LiveDetailBean;
 import com.example.rumens.showtime.api.bean.LiveListItemBean;
+import com.example.rumens.showtime.api.bean.OldLiveVideoInfo;
 import com.example.rumens.showtime.base.BaseActivity;
 import com.example.rumens.showtime.base.IVideoPresenter;
+import com.example.rumens.showtime.inject.component.DaggerVideoLiveDouyuPlayerComponent;
 import com.example.rumens.showtime.inject.component.DaggerVideoLivePlayerComponent;
+import com.example.rumens.showtime.inject.modules.VideoLiveDouyuPlayerModule;
 import com.example.rumens.showtime.inject.modules.VideoLivePlayerModule;
 import com.example.rumens.showtime.local.VideoInfo;
 import com.example.rumens.showtime.video.videoplay.videoplayhelper.media.IjkPlayerView;
@@ -34,6 +42,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.vov.vitamio.Vitamio;
 
 /**
  * @author Zhaochen Ping
@@ -78,26 +87,30 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
     private LiveDetailBean mDetailLiveData;
     private DouyuLiveListItemBean.DataBean mDouyuData;
     private String mDouyuType;
+    private OldLiveVideoInfo mLiveDouyuVideo;
 
     @Override
     public void loadLiveData(LiveDetailBean data) {
-        if(mDouyuType!=null){
-            String douyuUrl = mDouyuData.getUrl();
-            mVideoPlayer.init()
-                    .setTitle(mDouyuData.getRoom_name())
-                    .setVideoSource(null, douyuUrl, null, null, null);
-            Glide.with(this).load(mDouyuData.getRoom_src()).fitCenter().into(mVideoPlayer.mPlayerThumb);
-        }else {
             mDetailLiveData=data;
             List<LiveDetailBean.StreamListBean> streamList = data.getStream_list();
             LiveDetailBean.StreamListBean streamListBean = streamList.get(streamList.size() - 1);
             mLiveDetailUrl = streamListBean.getUrl();
             mVideoPlayer.init()
-                    .setTitle(mVideoLiveData.getLive_title())
-                    .setVideoSource(null, mLiveDetailUrl, null, null, null);
+                .setTitle(mVideoLiveData.getLive_title())
+                .setVideoSource(null, mLiveDetailUrl, null, null, null);
             Glide.with(this).load(mDetailLiveData.getLive_img()).fitCenter().into(mVideoPlayer.mPlayerThumb);
-        }
 
+    }
+
+    @Override
+    public void loadLiveDouyuData(OldLiveVideoInfo data) {
+           mLiveDouyuVideo = data;
+        String url = mLiveDouyuVideo.getData().getLive_url();
+        Uri uri = Uri.parse(url);
+        mVideoPlayer.init()
+                .setTitle(mLiveDouyuVideo.getData().getRoom_name())
+                .setVideoSource(null, url, null, null, null);
+        Glide.with(this).load(mDouyuData.getRoom_src()).fitCenter().into(mVideoPlayer.mPlayerThumb);
     }
 
     @Override
@@ -112,24 +125,23 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
 
     @Override
     protected void updateViews() {
-        if(TextUtils.isEmpty(mDouyuType)){
-            mPresenter.getData();
-        }else{
-            String douyuUrl = mDouyuData.getUrl();
-            String room_name = mDouyuData.getRoom_name();
-            mVideoPlayer.init()
-                    .setTitle(room_name)
-                    .setVideoSource(null, douyuUrl, null, null, null);
-            Glide.with(this).load(mDouyuData.getRoom_src()).fitCenter().into(mVideoPlayer.mPlayerThumb);
-        }
+        mPresenter.getData();
     }
 
     @Override
     protected void initView() {
         if(mVideoLiveData!=null){
-            initToolBar(mToolbar, true, mVideoLiveData.getLive_title());
-            mLlOperate.setVisibility(View.GONE);
-            mLayoutBottom.setVisibility(View.VISIBLE);
+            if(TextUtils.isEmpty(mDouyuType)){
+                initToolBar(mToolbar, true, mVideoLiveData.getLive_title());
+                mLlOperate.setVisibility(View.GONE);
+                mLayoutBottom.setVisibility(View.VISIBLE);
+            }else{
+                initToolBar(mToolbar, true, mLiveDouyuVideo.getData().getRoom_name());
+                mLlOperate.setVisibility(View.GONE);
+                mLayoutBottom.setVisibility(View.VISIBLE);
+
+            }
+
 //            mIvVideoCollect.init(this);
 //            mIvVideoCollect.setShapeResource(R.mipmap.ic_video_collect);
 //            mEtContent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -154,23 +166,33 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
 
     @Override
     protected int getContenView() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏标题
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置全屏
+        Vitamio.isInitialized(this);
         return R.layout.activity_video_player;
+//        return R.layout.activity_video_douyu_player;
     }
 
     @Override
     protected void initInjector() {
+        mDouyuType = getIntent().getStringExtra(DOU_YU);
         mVideoLiveData = getIntent().getParcelableExtra(VIDEO_TYPE_LIVE);
         mDouyuData = getIntent().getParcelableExtra(GAME_TYPE_DOUYU);
-        mDouyuType = getIntent().getStringExtra(DOU_YU);
-        if(TextUtils.isEmpty(mDouyuType)){
-            if(mVideoLiveData!=null){
+            if(TextUtils.equals(mDouyuType,"douyu")){
+                DaggerVideoLiveDouyuPlayerComponent.builder()
+                        .appComponent(getAppComponent())
+                        .videoLiveDouyuPlayerModule(new VideoLiveDouyuPlayerModule(this, mDouyuData,mDouyuType))
+                        .build()
+                        .inject(this);
+            }else if(mVideoLiveData!=null&&TextUtils.isEmpty(mDouyuType)){
                 DaggerVideoLivePlayerComponent.builder()
                         .appComponent(getAppComponent())
                         .videoLivePlayerModule(new VideoLivePlayerModule(this, mVideoLiveData))
                         .build()
                         .inject(this);
             }
-        }
+
     }
 
     public static void lunchLive(Context mContext, LiveListItemBean bean) {
@@ -185,5 +207,44 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
         intent.putExtra(DOU_YU,mPlatformType);
         mContext.startActivity(intent);
         ((Activity) mContext).overridePendingTransition(R.anim.slide_bottom_entry, R.anim.hold);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mVideoPlayer.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mVideoPlayer.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mVideoPlayer.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mVideoPlayer.configurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (mVideoPlayer.handleVolumeKey(keyCode)) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mVideoPlayer.onBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
     }
 }

@@ -1,22 +1,22 @@
 package com.example.rumens.showtime.video.videoplay;
 
+import android.text.TextUtils;
+
+import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.api.bean.LiveBaseBean;
 import com.example.rumens.showtime.api.bean.LiveDetailBean;
 import com.example.rumens.showtime.api.bean.LiveListItemBean;
+import com.example.rumens.showtime.api.bean.OldLiveVideoInfo;
 import com.example.rumens.showtime.base.IVideoPresenter;
+import com.example.rumens.showtime.utils.MD5Util;
 import com.example.rumens.showtime.utils.RetrofitService;
 import com.example.rumens.showtime.widget.EmptyErrLayout;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+
 
 /**
  * @author Zhaochen Ping
@@ -26,7 +26,9 @@ import rx.schedulers.Schedulers;
 
 public class VideoPlayerPresenter implements IVideoPresenter {
     private final IVideoView mView;
-    private final LiveListItemBean mVideoLiveData;
+    private DouyuLiveListItemBean.DataBean mDouyuData;
+    private String mDouyuType;
+    private  LiveListItemBean mVideoLiveData;
     private Observable.Transformer<LiveBaseBean<LiveDetailBean>, LiveDetailBean> mTransform = new Observable.Transformer<LiveBaseBean<LiveDetailBean>, LiveDetailBean>() {
         @Override
         public Observable<LiveDetailBean> call(Observable<LiveBaseBean<LiveDetailBean>> liveBaseBeanObservable) {
@@ -46,41 +48,42 @@ public class VideoPlayerPresenter implements IVideoPresenter {
         this.mVideoLiveData = mVideoLiveData;
     }
 
+
     @Override
     public void getData() {
 
-        String gameType = mVideoLiveData.getGame_type();
-        String liveId = mVideoLiveData.getLive_id();
-        String liveType = mVideoLiveData.getLive_type();
-        RetrofitService.getLiveDetail(liveType,liveId,gameType)
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mView.showLoading();
-                    }
-                })
-                .compose(mTransform)
-                .subscribe(new Subscriber<LiveDetailBean>() {
-                    @Override
-                    public void onCompleted() {
-                        mView.hideLoading();
-                    }
+            String gameType = mVideoLiveData.getGame_type();
+            String liveId = mVideoLiveData.getLive_id();
+            String liveType = mVideoLiveData.getLive_type();
+            RetrofitService.getLiveDetail(liveType,liveId,gameType)
+                    .doOnSubscribe(new Action0() {
+                        @Override
+                        public void call() {
+                            mView.showLoading();
+                        }
+                    })
+                    .compose(mTransform)
+                    .subscribe(new Subscriber<LiveDetailBean>() {
+                        @Override
+                        public void onCompleted() {
+                            mView.hideLoading();
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.showNetError(new EmptyErrLayout.OnRetryListener() {
-                            @Override
-                            public void onRetry() {
-                                getData();
-                            }
-                        });
-                    }
+                        @Override
+                        public void onError(Throwable e) {
+                            mView.showNetError(new EmptyErrLayout.OnRetryListener() {
+                                @Override
+                                public void onRetry() {
+                                    getData();
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onNext(LiveDetailBean liveDetailBean) {
-                        mView.loadLiveData(liveDetailBean);
-                    }
-                });
+                        @Override
+                        public void onNext(LiveDetailBean liveDetailBean) {
+                            mView.loadLiveData(liveDetailBean);
+                        }
+                    });
     }
 
     @Override
