@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">ShowTime</string>
+
+
+    <string name="loading_desc">加载中...</string>
+    <string name="no_more_data">- 没有更多数据 -</string>
+    <string name="load_abnormal">- 加载异常，点击重试 -</string>
+    <!--直播-->
+    <string name="live_all">直播</string>
+    <string name="live_lol">英雄联盟</string>
+    <string name="live_ow">守望先锋</string>
+    <string name="live_dota2">DOTA2</string>
+    <string name="live_hs">炉石传说</string>
+    <string name="live_csgo">CSGO</string>
+
+
+    <string name="live_footer">无更多直播</string>
+    <string name="live_loadmore_error">点击尝试加载更多</string>
+    <string name="live_empty">暂无直播</string>
+    <string name="game_type_all">live</string>
+    <string name="game_type_lol">lol</string>
+    <string name="game_type_ow">ow</string>
+    <string name="game_type_dota2">dota2</string>
+    <string name="game_type_hs">hs</string>
+    <string name="game_type_csgo">csgo</string>
+    <string name="stream_1080p">超清</string>
+    <string name="stream_360p">普清</string>
+    <string name="chat_name">我</string>
+    <string name="live_visitor">游客</string>
+    <string name="live_platform">平台</string>
+    <string name="live_quote">：</string>
+    <string name="live_roomname">直播间名称</string>
+    <string name="live_nickname">主播昵称：</string>
+    <string name="live_live_platform">直播平台：</string>
+    <string name="live_game_type">游戏分类：</string>
+    <string name="live_exchange">切换栏目</string>
+    <string name="live_danmu">弹幕</string>
+    <string name="live_send_danmu">输入发送弹幕(15字以内)</string>
+    <string name="live_1080p">超清</string>
+    <string name="live_720p">高清</string>
+
+    <string name="video_record">记忆上次播放到</string>
+    <string name="video_skip">继续播放</string>
+
+    <string-array name="media_quality">
+        <item>流畅</item>
+        <item>清晰</item>
+        <item>高清</item>
+        <item>超清</item>
+        <item>1080P</item>
+    </string-array>
+
+</resources>
