@@ -51,7 +51,6 @@ public class VideoPlayerPresenter implements IVideoPresenter {
 
     @Override
     public void getData() {
-
             String gameType = mVideoLiveData.getGame_type();
             String liveId = mVideoLiveData.getLive_id();
             String liveType = mVideoLiveData.getLive_type();

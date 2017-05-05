@@ -44,40 +44,6 @@ public class VideoDouyuPlayerPresenter implements IVideoPresenter {
     @Override
     public void getData() {
         String roomId = mDouyuData.getRoom_id();
-//        int time = (int)(System.currentTimeMillis() / 1000) ;
-//        String str = "lapi/live/thirdPart/getPlay/" + roomId + "?aid=pcclient&rate=0&time=" + time + "9TUk5fjjUjg9qIMH3sdnh";
-//        String auth = MD5Util.getToMd5Low32(str);
-//        RetrofitService.getDouyuLiveVideoInfo(roomId,auth,time+"")
-//                .doOnSubscribe(new Action0() {
-//                    @Override
-//                    public void call() {
-//                        mView.showLoading();
-//                    }
-//                })
-//                .compose(mView.<List<OldLiveVideoInfo>>bindToLife())
-//                .subscribe(new Subscriber<List<OldLiveVideoInfo>>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        mView.hideLoading();
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        mView.showNetError(new EmptyErrLayout.OnRetryListener() {
-//                            @Override
-//                            public void onRetry() {
-//                                getData();
-//                            }
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void onNext(List<OldLiveVideoInfo> oldLiveVideoInfos) {
-//                        OldLiveVideoInfo oldLiveVideoInfo = oldLiveVideoInfos.get(oldLiveVideoInfos.size() - 1);
-//                        OldLiveVideoInfo.DataEntity data = oldLiveVideoInfo.getData();
-//                        mView.loadLiveDouyuData(oldLiveVideoInfo);
-//                    }
-//                });
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)

@@ -402,24 +402,6 @@ public class RetrofitService {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-//    private static Request getRequest(String roomId) {
-//        /**
-//         * 房间加密处理
-//         */
-//        int time = (int)(System.currentTimeMillis() / 1000) ;
-//        String str = "lapi/live/thirdPart/getPlay/" + roomId + "?aid=pcclient&rate=0&time=" + time + "9TUk5fjjUjg9qIMH3sdnh";
-//        String auth = MD5Util.getToMd5Low32(str);
-////        L.e("地址为:"+NetWorkApi.baseUrl + NetWorkApi.getLiveVideo + room_id+"?"+tempParams.toString());
-//        Request requestPost = new Request.Builder()
-//                .url( "http://coapi.douyucdn.cn"+"/lapi/live/thirdPart/getPlay/"+ roomId + "?rate=0")
-//                .get()
-//                .addHeader("aid","pcclient")
-//                .addHeader("auth",auth)
-//                .addHeader("time",time+"")
-//                .build();
-//        return requestPost;
-//    }
-
 
     /******************************************* 转换器 **********************************************/
 

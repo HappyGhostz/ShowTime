@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -20,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.rumens.showtime.R;
@@ -40,6 +43,8 @@ import java.io.InputStream;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.utils.ScreenResolution;
 import io.vov.vitamio.widget.VideoView;
@@ -51,7 +56,7 @@ import master.flame.danmaku.ui.widget.DanmakuView;
  * @description
  */
 
-public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements IVideoView {
+public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements IVideoView, MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnErrorListener {
 
 
     public static final String LIVE_TYPE = "live_type"; //直播平台
@@ -111,31 +116,19 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
     TextView mTvControl;
     @BindView(R.id.control_center)
     RelativeLayout mControlCenter;
-    private int mScreenWidth = 0;//屏幕宽度
-    //    @BindView(R.id.toolbar)
-//    Toolbar mToolbar;
-//    @BindView(R.id.video_player)
-//    IjkPlayerView mVideoPlayer;
-//    @BindView(R.id.et_content)
-//    EditText mEtContent;
-//    @BindView(R.id.tag_send)
-//    TagView mTagSend;
-//    @BindView(R.id.ll_edit_layout)
-//    LinearLayout mLlEditLayout;
-//    @BindView(R.id.iv_video_share)
-//    ImageView mIvVideoShare;
-//    @BindView(R.id.iv_video_collect)
-//    ShineButton mIvVideoCollect;
-//    @BindView(R.id.iv_video_download)
-//    ImageView mIvVideoDownload;
-//    @BindView(R.id.ll_operate)
-//    LinearLayout mLlOperate;
-////    @BindView(R.id.magic_indicator)
-////    MagicIndicator mMagicIndicator;
-//    @BindView(R.id.layout_container)
-//    FrameLayout mLayoutContainer;
-//    @BindView(R.id.layout_bottom)
-//    LinearLayout mLayoutBottom;
+    /**
+     * 声音
+     */
+    public final static int ADD_FLAG = 1;
+    /**
+     * 亮度
+     */
+    public final static int SUB_FLAG = -1;
+
+    public static final int HIDE_CONTROL_BAR = 0x02;//隐藏控制条
+    public static final int HIDE_TIME = 5000;//隐藏控制条时间
+    public static final int SHOW_CENTER_CONTROL = 0x03;//显示中间控制
+    public static final int SHOW_CONTROL_TIME = 1000;
     private LiveListItemBean mVideoLiveData;
     private String mLiveDetailUrl;
     private LiveDetailBean mDetailLiveData;
@@ -149,29 +142,110 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
     private int mShowLightness;//亮度
     private int mMaxVolume;//最大声音
     private GestureDetector.SimpleOnGestureListener mSimpleOnGestureListener;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                /**
+                 *  隐藏top ,bottom
+                 */
+                case HIDE_CONTROL_BAR:
+                    hideControlBar();
+                    break;
+                /**
+                 *  隐藏center控件
+                 */
+                case SHOW_CENTER_CONTROL:
+                    if (mControlCenter != null) {
+                        mControlCenter.setVisibility(View.GONE);
+                    }
+                    break;
+            }
+        }
+    };
+    private GestureDetector mGestureDetector;
 
     @Override
-    public void loadLiveData(LiveDetailBean data) {
+    public void loadLiveData(final LiveDetailBean data) {
         mDetailLiveData = data;
-        List<LiveDetailBean.StreamListBean> streamList = data.getStream_list();
-        LiveDetailBean.StreamListBean streamListBean = streamList.get(streamList.size() - 1);
-        mLiveDetailUrl = streamListBean.getUrl();
-        mVideoPlayer.init()
-                .setTitle(mVideoLiveData.getLive_title())
-                .setVideoSource(null, mLiveDetailUrl, null, null, null);
-        Glide.with(this).load(mDetailLiveData.getLive_img()).fitCenter().into(mVideoPlayer.mPlayerThumb);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                videoInfo = data;
+                getLiveData(data);
+            }
+        });
 
     }
 
+    private void getLiveData(LiveDetailBean data) {
+        List<LiveDetailBean.StreamListBean> streamList = data.getStream_list();
+        LiveDetailBean.StreamListBean streamListBean = streamList.get(streamList.size() - 1);
+        mLiveDetailUrl = streamListBean.getUrl();
+        Uri uri = Uri.parse(mLiveDetailUrl);
+        if(mTvLiveNickname!=null) {
+            mTvLiveNickname.setText(data.getLive_name());
+        }
+
+        if(mVmVideoview!=null) {
+            mVmVideoview.setVideoURI(uri);
+            mVmVideoview.setBufferSize(1024 * 1024 * 2);
+            mVmVideoview.setVideoQuality(MediaPlayer.VIDEOQUALITY_HIGH);
+            mVmVideoview.requestFocus();
+//            vmVideoview.setSubShown(true);
+
+            mVmVideoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    // optional need Vitamio 4.0
+                    mediaPlayer.setPlaybackSpeed(1.0f);
+                    mFlLoading.setVisibility(View.GONE);
+                    mIvLivePlay.setImageResource(R.drawable.img_live_videopause);
+                    mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
+
+                }
+            });
+        }
+    }
+
     @Override
-    public void loadLiveDouyuData(OldLiveVideoInfo data) {
+    public void loadLiveDouyuData(final OldLiveVideoInfo data) {
         mLiveDouyuVideo = data;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                videoInfo = data;
+                getViewInfo(data);
+            }
+        });
+    }
+
+    private void getViewInfo(OldLiveVideoInfo data) {
         String url = mLiveDouyuVideo.getData().getLive_url();
         Uri uri = Uri.parse(url);
-        mVideoPlayer.init()
-                .setTitle(mLiveDouyuVideo.getData().getRoom_name())
-                .setVideoSource(null, url, null, null, null);
-        Glide.with(this).load(mDouyuData.getRoom_src()).fitCenter().into(mVideoPlayer.mPlayerThumb);
+        if(mTvLiveNickname!=null) {
+            mTvLiveNickname.setText(data.getData().getRoom_name());
+        }
+
+        if(mVmVideoview!=null) {
+            mVmVideoview.setVideoURI(uri);
+            mVmVideoview.setBufferSize(1024 * 1024 * 2);
+            mVmVideoview.setVideoQuality(MediaPlayer.VIDEOQUALITY_HIGH);
+            mVmVideoview.requestFocus();
+//            vmVideoview.setSubShown(true);
+
+            mVmVideoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    // optional need Vitamio 4.0
+                    mediaPlayer.setPlaybackSpeed(1.0f);
+                    mFlLoading.setVisibility(View.GONE);
+                    mIvLivePlay.setImageResource(R.drawable.img_live_videopause);
+                    mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
+
+                }
+            });
+        }
     }
 
     @Override
@@ -198,39 +272,10 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
         mScreenWidth = screenPair.first;
         initVolumeWithLight();
         addTouchListener();
-        vmVideoview.setVideoLayout(VideoView.VIDEO_LAYOUT_STRETCH, 0);
-//        if (mVideoLiveData != null) {
-//            if (TextUtils.isEmpty(mDouyuType)) {
-//                initToolBar(mToolbar, true, mVideoLiveData.getLive_title());
-//                mLlOperate.setVisibility(View.GONE);
-//                mLayoutBottom.setVisibility(View.VISIBLE);
-//            } else {
-//                initToolBar(mToolbar, true, mLiveDouyuVideo.getData().getRoom_name());
-//                mLlOperate.setVisibility(View.GONE);
-//                mLayoutBottom.setVisibility(View.VISIBLE);
-//
-//            }
-
-//            mIvVideoCollect.init(this);
-//            mIvVideoCollect.setShapeResource(R.mipmap.ic_video_collect);
-//            mEtContent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View v, boolean hasFocus) {
-//                    if (hasFocus) {
-//                        mVideoPlayer.editVideo();
-//                    }
-//                    mLlOperate.setVisibility(hasFocus ? View.GONE : View.VISIBLE);
-//                }
-//            });
-//            mTagSend.setTagClickListener(new TagView.OnTagClickListener() {
-//                @Override
-//                public void onTagClick(int i, String s, int i1) {
-//                    mVideoPlayer.sendDanmaku(mEtContent.getText().toString(), false);
-//                    mEtContent.setText("");
-////                _closeSoftInput();
-//                }
-//            });
-        }
+        mVmVideoview.setVideoLayout(VideoView.VIDEO_LAYOUT_STRETCH, 0);
+        mVmVideoview.setOnInfoListener(this);
+        mVmVideoview.setOnBufferingUpdateListener(this);
+        mVmVideoview.setOnErrorListener(this);
     }
     /**
      * 初始化声音和亮度
@@ -331,7 +376,7 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
         //tagVolume:音量绝对值
         mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, tagVolume, 0);
         mHandler.removeMessages(SHOW_CENTER_CONTROL);
-        controlCenter.setVisibility(View.VISIBLE);
+        mControlCenter.setVisibility(View.VISIBLE);
         mHandler.sendEmptyMessageDelayed(SHOW_CENTER_CONTROL, SHOW_CONTROL_TIME);
     }
 
@@ -345,19 +390,45 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
         } else if (mShowLightness <= 0) {
             mShowLightness = 0;
         }
-        tvControlName.setText("亮度");
-        ivControlImg.setImageResource(R.drawable.img_light);
-        tvControl.setText(mShowLightness * 100 / 255 + "%");
+        mTvControlName.setText("亮度");
+        mIvControlImg.setImageResource(R.drawable.img_light);
+        mTvControl.setText(mShowLightness * 100 / 255 + "%");
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.screenBrightness = mShowLightness / 255f;
         getWindow().setAttributes(lp);
 
         mHandler.removeMessages(SHOW_CENTER_CONTROL);
-        controlCenter.setVisibility(View.VISIBLE);
+        mControlCenter.setVisibility(View.VISIBLE);
         mHandler.sendEmptyMessageDelayed(SHOW_CENTER_CONTROL, SHOW_CONTROL_TIME);
     }
 
+    /**
+     * 触摸事件进行监听
+     *
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mGestureDetector != null)
+            mGestureDetector.onTouchEvent(event);
 
+        return super.onTouchEvent(event);
+    }
+
+    /**
+     * 正在缓冲
+     *
+     * @param mp      the MediaPlayer the update pertains to
+     * @param percent the percentage (0-100) of the buffer that has been filled thus
+     */
+    @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        mFlLoading.setVisibility(View.VISIBLE);
+        if (mVmVideoview.isPlaying())
+            mVmVideoview.pause();
+        tvLoadingBuffer.setText("直播已缓冲"+percent+"%...");
+    }
     @Override
     protected int getContenView() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏标题
@@ -388,6 +459,26 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
         }
 
     }
+    /**
+     * 隐藏控制条
+     */
+    private void hideControlBar() {
+        if (controlBottom != null && mControlTop != null) {
+            controlBottom.setVisibility(View.GONE);
+            mControlTop.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 显示控制条
+     */
+    private void showControlBar() {
+        if (controlBottom != null && mControlTop != null) {
+            controlBottom.setVisibility(View.VISIBLE);
+            mControlTop.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     public static void lunchLive(Context mContext, LiveListItemBean bean) {
         Intent intent = new Intent(mContext, VideoPlayActivity.class);
@@ -405,43 +496,102 @@ public class VideoPlayActivity extends BaseActivity<IVideoPresenter> implements 
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mVideoPlayer.onResume();
+    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        switch (what) {
+            case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+                if (mVmVideoview.isPlaying()) {
+                    mVmVideoview.pause();
+                }
+                mIvLivePlay.setImageResource(R.drawable.img_live_videoplay);
+                mHandler.removeMessages(HIDE_CONTROL_BAR);
+                showControlBar();
+                break;
+//            完成缓冲
+            case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+                mFlLoading.setVisibility(View.GONE);
+                if (!mVmVideoview.isPlaying())
+                    mVmVideoview.start();
+                mIvLivePlay.setImageResource(R.drawable.img_live_videopause);
+                mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
+                break;
+            case MediaPlayer.MEDIA_INFO_DOWNLOAD_RATE_CHANGED:
+
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        if (what == MediaPlayer.MEDIA_ERROR_UNKNOWN) {
+//            svProgressHUD.showErrorWithStatus("主播还在赶来的路上~~");
+            Toast.makeText(this, "主播还在赶来的路上~~", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
+    /**
+     * 返回
+     */
+    @OnClick(R.id.iv_back)
+    public void ivBack() {
+        this.finish();
+    }
+
+    /**
+     * 暂停/播放
+     */
+    @OnClick(R.id.iv_live_play)
+    public void ivLivePlay() {
+        if (mVmVideoview.isPlaying()) {
+            mVmVideoview.pause();
+            mIvLivePlay.setImageResource(R.drawable.img_live_videoplay);
+            mHandler.removeMessages(HIDE_CONTROL_BAR);
+            showControlBar();
+        } else {
+            mVmVideoview.start();
+            mIvLivePlay.setImageResource(R.drawable.img_live_videopause);
+            mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
+        }
+    }
+    /**
+     * 刷新
+     */
+    @OnClick(R.id.iv_live_refresh)
+    public void ivLiveRefresh() {
+//        mPresenter.getPresenterPcLiveVideoInfo(Room_id);
+        mPresenter.getData();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+//        mPresenter.getPresenterPcLiveVideoInfo(Room_id);
+        mPresenter.getData();
+        if (mVmVideoview != null) {
+            mVmVideoview.start();
+
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mVideoPlayer.onPause();
+        if (mVmVideoview != null) {
+            mVmVideoview.pause();
+        }
     }
 
     @Override
     protected void onDestroy() {
+        if (mVmVideoview != null) {
+            //        释放资源
+            mVmVideoview.stopPlayback();
+        }
         super.onDestroy();
-        mVideoPlayer.onDestroy();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mVideoPlayer.configurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (mVideoPlayer.handleVolumeKey(keyCode)) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mVideoPlayer.onBackPressed()) {
-            return;
-        }
-        super.onBackPressed();
     }
 
 }
