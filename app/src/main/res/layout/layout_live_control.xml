@@ -197,9 +197,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:src="@mipmap/image_about_backage"
                     android:layout_centerHorizontal="true"
-                    />
+                    android:src="@mipmap/image_about_backage" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -217,18 +216,18 @@
                         app:isNeedBackground="false"
                         app:outerCircleColor="@color/colorPrimary"
                         app:outerCircleRadius="10dp" />
+
                     <TextView
                         android:id="@+id/tv_loading_buffer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
                         android:layout_marginRight="@dimen/wh35.0dimens35.0dp"
                         android:layout_marginTop="@dimen/wh13.0dimens13.0dp"
                         android:layout_toRightOf="@id/lv_playloading"
-                        android:layout_centerHorizontal="true"
                         android:text="直播视频连接中..."
                         android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        />
+                        android:textSize="14sp" />
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>

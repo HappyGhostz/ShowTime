@@ -36,6 +36,7 @@ import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.utils.ScreenResolution;
@@ -192,7 +193,13 @@ public class DouyuPhonePlayActivity extends BaseActivity<IVideoPresenter> implem
             }
         });
     }
-
+    /**
+     * 返回
+     */
+    @OnClick(R.id.iv_back)
+    public void ivBack() {
+        this.finish();
+    }
     @Override
     public void loadVideoData(VideoInfo data) {
 
