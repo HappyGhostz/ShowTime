@@ -40,6 +40,11 @@
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:name=".video.videoplay.DouyuPhonePlayActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
         <activity android:name=".video.TestActivity"/>
     </application>
 

@@ -12,6 +12,8 @@ import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.api.bean.LiveListItemBean;
 import com.example.rumens.showtime.utils.DefIconFactory;
 import com.example.rumens.showtime.utils.ImageLoader;
+import com.example.rumens.showtime.video.videoplay.DouyuPhonePlayActivity;
+import com.example.rumens.showtime.video.videoplay.DouyuWebViewPlayActivity;
 import com.example.rumens.showtime.video.videoplay.VideoPlayActivity;
 import com.example.rumens.showtime.widget.RippleView;
 
@@ -52,7 +54,13 @@ public class LiveAdapter extends BaseQuickAdapter {
                 rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                     @Override
                     public void onComplete(RippleView rippleView) {
-                        VideoPlayActivity.lunchLiveDouyu(mContext,((DouyuLiveListItemBean.DataBean) item),mPlatformType);
+                        if(((DouyuLiveListItemBean.DataBean) item).getCate_id()== 201){
+                            DouyuPhonePlayActivity.lunchLiveDouyu(mContext,((DouyuLiveListItemBean.DataBean) item),mPlatformType);
+                        }else if (((DouyuLiveListItemBean.DataBean) item).getCate_id()==207){
+                            DouyuWebViewPlayActivity.lunchLiveDouyu(mContext,((DouyuLiveListItemBean.DataBean) item),mPlatformType);
+                        }else{
+                            VideoPlayActivity.lunchLiveDouyu(mContext,((DouyuLiveListItemBean.DataBean) item),mPlatformType);
+                        }
                     }
                 });
             }
