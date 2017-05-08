@@ -12,7 +12,7 @@ import java.util.List;
  * @description
  */
 
-interface IVideoLiveView<T>extends IBaseView {
+public interface IVideoLiveView<T>extends IBaseView {
     /**
      * 加载数据
      * @param liveListItemBeen 数据

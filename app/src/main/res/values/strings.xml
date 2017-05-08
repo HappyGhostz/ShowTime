@@ -28,6 +28,7 @@
     <string name="chat_name">我</string>
     <string name="live_visitor">游客</string>
     <string name="live_platform">平台</string>
+    <string name="video_seach">搜索</string>
     <string name="live_quote">：</string>
     <string name="live_roomname">直播间名称</string>
     <string name="live_nickname">主播昵称：</string>

@@ -1,30 +1,22 @@
 package com.example.rumens.showtime.video;
 
-import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.base.BaseFragment;
-import com.example.rumens.showtime.video.kankan.VideoListFragment;
+import com.example.rumens.showtime.video.kankan.VideoMainFragment;
 import com.example.rumens.showtime.video.live.LiveListFragment;
-import com.example.rumens.showtime.widget.VideoTabLayout;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * @author Zhaochen Ping
@@ -69,7 +61,7 @@ public class VideoFragment extends BaseFragment {
                         ireplaceFragment(R.id.live_container, new LiveListFragment(), "live");
                         break;
                     case R.id.rb_video:
-                        ireplaceFragment(R.id.live_container, new VideoListFragment(), "kankan");
+                        ireplaceFragment(R.id.live_container, new VideoMainFragment(), "kankan");
                         break;
                 }
             }
@@ -93,7 +85,7 @@ public class VideoFragment extends BaseFragment {
 
     @Override
     protected void updateViews() {
-        initFragment(R.id.live_container, new VideoListFragment(), "kankan");
+        initFragment(R.id.live_container, new VideoMainFragment(), "kankan");
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
