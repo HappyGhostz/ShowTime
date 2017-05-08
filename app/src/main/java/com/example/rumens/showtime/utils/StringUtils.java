@@ -8,6 +8,8 @@ import android.util.Log;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,6 +19,35 @@ import java.util.regex.Pattern;
  * 字符串工具
  */
 public class StringUtils {
+    /**
+     * 把毫秒值格式化成 hh:mm:ss格式
+     * @param millisec 毫秒值
+     * @return
+     */
+    public static String formatTime(int millisec){
+        String result = null;
+        int hour = 1000*60*60;
+        int minute = 1000*60;
+        int second = 1000;
+
+        //算出 小时h 分钟 min 秒 s
+        int h = millisec/hour;
+        int min = millisec%hour /minute;
+        int s = millisec%minute/second;
+
+        if(h>0){
+            //%d 整数的占位符 如果前面加上02说明要显示两位数 如果不足两位用0补齐
+            //后面是可变参数 有一个%d对应几个变量 按照顺序依次对应
+            result =  String.format("%02d:%02d:%02d",h,min,s);
+        }else{
+            result = String.format("%02d:%02d",min,s);
+        }
+        return result;
+    }
+    public static String getCurrentTime(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        return dateFormat.format(new Date());
+    }
 
     private StringUtils() {
         throw new RuntimeException("StringUtils cannot be initialized!");

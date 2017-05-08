@@ -1,14 +1,14 @@
 [
     {
-        "merged": "E:\\xiangmu\\ShowTime\\InitActivity\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\mediacontroller_button.xml",
-        "source": "E:\\xiangmu\\ShowTime\\InitActivity\\build\\intermediates\\bundles\\debug\\res\\drawable\\mediacontroller_button.xml"
+        "merged": "D:\\Android\\workspace\\WorkIng\\ShowTime\\InitActivity\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\mediacontroller_button.xml",
+        "source": "D:\\Android\\workspace\\WorkIng\\ShowTime\\InitActivity\\build\\intermediates\\bundles\\debug\\res\\drawable\\mediacontroller_button.xml"
     },
     {
-        "merged": "E:\\xiangmu\\ShowTime\\InitActivity\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\scrubber_control_selector_holo.xml",
-        "source": "E:\\xiangmu\\ShowTime\\InitActivity\\build\\intermediates\\bundles\\debug\\res\\drawable\\scrubber_control_selector_holo.xml"
+        "merged": "D:\\Android\\workspace\\WorkIng\\ShowTime\\InitActivity\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\scrubber_progress_horizontal_holo_dark.xml",
+        "source": "D:\\Android\\workspace\\WorkIng\\ShowTime\\InitActivity\\build\\intermediates\\bundles\\debug\\res\\drawable\\scrubber_progress_horizontal_holo_dark.xml"
     },
     {
-        "merged": "E:\\xiangmu\\ShowTime\\InitActivity\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\scrubber_progress_horizontal_holo_dark.xml",
-        "source": "E:\\xiangmu\\ShowTime\\InitActivity\\build\\intermediates\\bundles\\debug\\res\\drawable\\scrubber_progress_horizontal_holo_dark.xml"
+        "merged": "D:\\Android\\workspace\\WorkIng\\ShowTime\\InitActivity\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\scrubber_control_selector_holo.xml",
+        "source": "D:\\Android\\workspace\\WorkIng\\ShowTime\\InitActivity\\build\\intermediates\\bundles\\debug\\res\\drawable\\scrubber_control_selector_holo.xml"
     }
 ]

@@ -62,4 +62,7 @@
     <color name="recover_screen_text">#f06292</color>
     <color name="control_bar_bg">#e0222222</color>
 
+    <color name="titleSelect">#2DAA73</color>
+    <color name="titlenormal">#364E5B</color>
+
 </resources>

@@ -7,4 +7,5 @@ package com.example.rumens.showtime.api.bean;
  */
 
 public class VideoListItemBean {
+
 }

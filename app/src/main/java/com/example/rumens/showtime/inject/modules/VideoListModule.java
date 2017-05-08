@@ -1,5 +1,7 @@
 package com.example.rumens.showtime.inject.modules;
 
+import android.text.TextUtils;
+
 import com.example.rumens.showtime.adapter.VideoListAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.base.IBasePresenter;
