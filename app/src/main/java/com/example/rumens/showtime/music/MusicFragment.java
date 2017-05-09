@@ -15,7 +15,7 @@ public class MusicFragment extends BaseFragment {
 
     @Override
     protected int attachLayoutRes() {
-        return R.layout.test_fragment;
+        return R.layout.fragment_music_main;
     }
 
     @Override

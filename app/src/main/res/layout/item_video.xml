@@ -14,7 +14,7 @@
         android:layout_toRightOf="@id/iv_videoicon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
+        android:textColor="@color/titleSelect"
         android:textSize="20sp"
         android:text="视频标题"
         />

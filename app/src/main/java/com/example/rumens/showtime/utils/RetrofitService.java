@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.rumens.showtime.api.IBookApi;
 import com.example.rumens.showtime.api.IDouyuApi;
 import com.example.rumens.showtime.api.IDouyuVideoApi;
 import com.example.rumens.showtime.api.ILivesApi;
@@ -19,6 +20,7 @@ import com.example.rumens.showtime.api.bean.NewsInfo;
 import com.example.rumens.showtime.api.bean.OldLiveVideoInfo;
 import com.example.rumens.showtime.api.bean.PhotoInfo;
 import com.example.rumens.showtime.api.bean.PhotoSetInfo;
+import com.example.rumens.showtime.api.bean.Recommend;
 import com.example.rumens.showtime.api.bean.SpecialInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoList;
@@ -80,12 +82,14 @@ public class RetrofitService {
     private static final String BASE_PANDA_URL = "http://www.panda.tv";
     private static final String BASE_DOUYU_URL = "http://capi.douyucdn.cn/api/v1/";
     private static final String BASE_LIVE_DOUYU_VIDEO_URL ="http://coapi.douyucdn.cn/" ;
+    private static final String BASE_BOOKE_URL ="http://api.zhuishushenqi.com" ;
 
     private static INewsApi sNewsService;
     private static IWelfareApi sWelfareService;
     private static ILivesApi sLivesService;
     private static IDouyuApi sDouyuLivesService;
     private static IDouyuVideoApi sDouyuLiveVideoService;
+    private static IBookApi sBookService;
     // 递增页码
     private static final int INCREASE_PAGE = 20;
     private static Context mContext;
@@ -156,12 +160,19 @@ public class RetrofitService {
 
         retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
-                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(BASE_LIVE_DOUYU_VIDEO_URL)
                 .build();
         sDouyuLiveVideoService = retrofit.create(IDouyuVideoApi.class);
+
+        retrofit = new Retrofit.Builder()
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl(BASE_BOOKE_URL)
+                .build();
+        sBookService = retrofit.create(IBookApi.class);
 
 
     }
@@ -397,6 +408,16 @@ public class RetrofitService {
      */
     public static Observable<OldLiveVideoInfo> getDouyuLiveVideoInfo(String roomId,String auth,String time){
         return sDouyuLiveVideoService.getDouyuLiveVideo(roomId,0,"pcclient",auth,time)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    /**
+     * 获取书架列表
+     */
+    public static Observable<Recommend> getBookRackListInfo(String gender){
+        return sBookService.getRecomend(gender)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
