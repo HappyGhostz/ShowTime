@@ -3,8 +3,8 @@ package com.example.rumens.showtime.inject.modules;
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.base.IVideoPresenter;
 import com.example.rumens.showtime.inject.PerActivity;
-import com.example.rumens.showtime.video.videoplay.DouyuPhonePlayActivity;
-import com.example.rumens.showtime.video.videoplay.VideoDouyuPlayerPresenter;
+import com.example.rumens.showtime.video.videoliveplay.DouyuPhonePlayActivity;
+import com.example.rumens.showtime.video.videoliveplay.VideoDouyuPlayerPresenter;
 
 import dagger.Module;
 import dagger.Provides;

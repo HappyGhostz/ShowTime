@@ -20,17 +20,6 @@ public interface IVideoListView<T> extends IBaseView{
      */
     void loadData(List<VideoListItemBean> videoListItemBeen);
     /**
-     * 加载数据
-     *  数据
-     */
-    void loadLocalVideoData();
-    /**
-     * 加载数据
-     * 据
-     */
-    void loadLocalVideoMoreData();
-
-    /**
      * 加载更多
      * @param videoListItemBeen 数据
      */

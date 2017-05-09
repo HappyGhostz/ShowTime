@@ -1,5 +1,9 @@
 [
     {
+        "merged": "E:\\xiangmu\\ShowTime\\InitActivity\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\ic_launcher.png",
+        "source": "E:\\xiangmu\\ShowTime\\InitActivity\\build\\intermediates\\bundles\\debug\\res\\drawable-ldpi-v4\\ic_launcher.png"
+    },
+    {
         "merged": "D:\\Android\\workspace\\WorkIng\\ShowTime\\InitActivity\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\ic_launcher.png",
         "source": "D:\\Android\\workspace\\WorkIng\\ShowTime\\InitActivity\\build\\intermediates\\bundles\\debug\\res\\drawable-ldpi-v4\\ic_launcher.png"
     }

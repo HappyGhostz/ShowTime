@@ -3,7 +3,6 @@ package com.example.rumens.showtime.adapter;
 import android.content.Context;
 import android.text.TextUtils;
 
-import android.view.View;
 import android.widget.ImageView;
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
@@ -12,9 +11,9 @@ import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.api.bean.LiveListItemBean;
 import com.example.rumens.showtime.utils.DefIconFactory;
 import com.example.rumens.showtime.utils.ImageLoader;
-import com.example.rumens.showtime.video.videoplay.DouyuPhonePlayActivity;
-import com.example.rumens.showtime.video.videoplay.DouyuWebViewPlayActivity;
-import com.example.rumens.showtime.video.videoplay.VideoPlayActivity;
+import com.example.rumens.showtime.video.videoliveplay.DouyuPhonePlayActivity;
+import com.example.rumens.showtime.video.videoliveplay.DouyuWebViewPlayActivity;
+import com.example.rumens.showtime.video.videoliveplay.VideoPlayActivity;
 import com.example.rumens.showtime.widget.RippleView;
 
 import de.hdodenhof.circleimageview.CircleImageView;

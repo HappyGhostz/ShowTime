@@ -2,7 +2,7 @@ package com.example.rumens.showtime.inject.component;
 
 import com.example.rumens.showtime.inject.PerActivity;
 import com.example.rumens.showtime.inject.modules.VideoLivePlayerModule;
-import com.example.rumens.showtime.video.videoplay.VideoPlayActivity;
+import com.example.rumens.showtime.video.videoliveplay.VideoPlayActivity;
 
 import dagger.Component;
 

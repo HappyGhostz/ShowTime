@@ -3,19 +3,12 @@ package com.example.rumens.showtime.video.live;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.SlideInBottomAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.helper.RecyclerViewHelper;
-import com.example.rumens.showtime.adapter.item.NewsMultiItem;
-import com.example.rumens.showtime.adapter.listener.OnRecyclerViewItemClickListener;
 import com.example.rumens.showtime.adapter.listener.OnRequestDataListener;
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.api.bean.LiveListItemBean;
@@ -23,10 +16,7 @@ import com.example.rumens.showtime.base.BaseFragment;
 import com.example.rumens.showtime.base.IBasePresenter;
 import com.example.rumens.showtime.inject.component.DaggerLiveComponent;
 import com.example.rumens.showtime.inject.modules.LiveModule;
-import com.example.rumens.showtime.video.videoplay.VideoPlayActivity;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;

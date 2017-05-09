@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.rumens.showtime">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
-    <uses-permission android:name="android.permission.BATTERY_STATS"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 硬件加速对X5视频播放非常重要，建议开启 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.READ_LOGS" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -24,37 +25,47 @@
         <activity android:name=".home.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".home.HomeActivity"
+        <activity
+            android:name=".home.HomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
-        <!--<activity android:name=".home.MainActivity"></activity>-->
-        <activity android:name=".news.channe.ChannelActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".news.special.SpecialActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".news.article.NewsArticleActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".photo.set.PhotoSetActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".video.videoplay.VideoPlayActivity"
+            android:screenOrientation="portrait" />
+        <!-- <activity android:name=".home.MainActivity"></activity> -->
+        <activity
+            android:name=".news.channe.ChannelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".news.special.SpecialActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".news.article.NewsArticleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".photo.set.PhotoSetActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".video.videoliveplay.VideoPlayActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".video.videoplay.DouyuPhonePlayActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".video.videoliveplay.DouyuPhonePlayActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
-        <activity android:name=".video.videoplay.DouyuWebViewPlayActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".video.videoliveplay.DouyuWebViewPlayActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
-        <activity android:name=".video.TestActivity"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity android:name=".video.TestActivity" />
+        <activity android:name=".video.videonetplay.VideoNetPlayActivity"></activity>
     </application>
 
 </manifest>

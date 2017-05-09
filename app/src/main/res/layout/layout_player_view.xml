@@ -7,7 +7,7 @@
              android:focusableInTouchMode="true"
              android:background="@android:color/black">
 
-    <com.example.rumens.showtime.video.videoplay.videoplayhelper.media.IjkVideoView
+    <com.example.rumens.showtime.video.videoliveplay.videoplayhelper.media.IjkVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

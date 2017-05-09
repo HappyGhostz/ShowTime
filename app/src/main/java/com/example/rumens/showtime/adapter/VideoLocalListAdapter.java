@@ -2,10 +2,10 @@ package com.example.rumens.showtime.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.widget.CursorAdapter;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.example.rumens.showtime.R;
@@ -18,9 +18,7 @@ import io.vov.vitamio.provider.MediaStore;
  * Created by e445 on 2017/5/8.
  */
 
-public class VideoLocalListAdapter extends CursorAdapter{
-
-
+public class VideoLocalListAdapter extends CursorAdapter {
     public VideoLocalListAdapter(Context context, Cursor c, boolean autoRequery) {
         super(context, c, autoRequery);
     }

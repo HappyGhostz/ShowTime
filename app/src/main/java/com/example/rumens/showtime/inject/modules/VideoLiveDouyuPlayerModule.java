@@ -1,13 +1,10 @@
 package com.example.rumens.showtime.inject.modules;
 
-import android.text.TextUtils;
-
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.base.IVideoPresenter;
 import com.example.rumens.showtime.inject.PerActivity;
-import com.example.rumens.showtime.video.videoplay.VideoDouyuPlayerPresenter;
-import com.example.rumens.showtime.video.videoplay.VideoPlayActivity;
-import com.example.rumens.showtime.video.videoplay.VideoPlayerPresenter;
+import com.example.rumens.showtime.video.videoliveplay.VideoDouyuPlayerPresenter;
+import com.example.rumens.showtime.video.videoliveplay.VideoPlayActivity;
 
 import dagger.Module;
 import dagger.Provides;

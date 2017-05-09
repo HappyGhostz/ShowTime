@@ -85,7 +85,7 @@ public class VideoFragment extends BaseFragment {
 
     @Override
     protected void updateViews() {
-        initFragment(R.id.live_container, new VideoMainFragment(), "kankan");
+        ireplaceFragment(R.id.live_container, new VideoMainFragment(), "kankan");
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

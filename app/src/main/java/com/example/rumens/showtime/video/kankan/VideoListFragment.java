@@ -44,27 +44,13 @@ public class VideoListFragment extends BaseFragment<IBasePresenter> implements I
     RecyclerView mVideoRecyclerview;
     @Inject
     BaseQuickAdapter mAdapter;
-    @Nullable
-    @BindView(R.id.video_listView)
-    ListView mLocalVideoListView;
     private String mVideoType;
-    private VideoLocalListAdapter adapter;
+
 
     @Override
     public void loadData(List<VideoListItemBean> videoListItemBeen) {
 
     }
-
-    @Override
-    public void loadLocalVideoData() {
-
-    }
-
-    @Override
-    public void loadLocalVideoMoreData() {
-
-    }
-
     @Override
     public void loadMoreData(List<VideoListItemBean> videoListItemBeen) {
 
@@ -77,31 +63,16 @@ public class VideoListFragment extends BaseFragment<IBasePresenter> implements I
 
     @Override
     protected int attachLayoutRes() {
-        if (TextUtils.equals(mVideoType, "本地")) {
-            return R.layout.fragment_layout_local_video;
-        } else {
-            return R.layout.fragment_video_type_list;
-        }
-
+        return R.layout.fragment_video_type_list;
     }
 
     @Override
     protected void initInjector() {
-        if (TextUtils.equals(mVideoType, "本地")) {
-            ContentResolver resolver = getContext().getContentResolver();
-            MyAsyncQueryHandler queryHandler = new MyAsyncQueryHandler(resolver);
-            adapter = new VideoLocalListAdapter(getContext(), null,false);
-            mLocalVideoListView.setAdapter(adapter);
-            queryHandler.startQuery(0,adapter, MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                    new String[]{io.vov.vitamio.provider.MediaStore.Video.Media._ID, io.vov.vitamio.provider.MediaStore.Video.Media.TITLE, io.vov.vitamio.provider.MediaStore.Video.Media.DURATION, io.vov.vitamio.provider.MediaStore.Video.Media.SIZE, io.vov.vitamio.provider.MediaStore.Video.Media.DATA},null,null,null);
-        } else {
             DaggerVideoListComponent.builder()
                     .appComponent(getAppComponent())
                     .videoListModule(new VideoListModule(this, mVideoType))
                     .build()
                     .inject(this);
-        }
-
     }
 
     @Override

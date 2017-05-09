@@ -1,12 +1,9 @@
 package com.example.rumens.showtime.video.kankan;
 
-import android.os.Bundle;
+
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.rumens.showtime.R;
@@ -16,11 +13,9 @@ import com.example.rumens.showtime.base.BaseFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+
 
 /**
  * @author Zhaochen Ping
@@ -74,7 +69,7 @@ public class VideoMainFragment extends BaseFragment {
         fragments.add(VideoListFragment.lunch( "搞笑"));
         fragments.add(VideoListFragment.lunch( "动漫"));
         fragments.add(VideoListFragment.lunch( "微电影"));
-        fragments.add(VideoListFragment.lunch( "本地"));
+        fragments.add(VideoLocalListFragment.lunch( "本地"));
     }
 
     @Override
