@@ -1,9 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_video_play"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.rumens.showtime.video.videonetplay.VideoNetPlayActivity">
+    >
+    <io.vov.vitamio.widget.VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
 
-</android.support.constraint.ConstraintLayout>
+        />
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/video_panel_bottom"
+        android:layout_alignParentBottom="true"/>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/video_panel_top"
+        android:layout_alignParentTop="true"/>
+    <View
+        android:id="@+id/alpha_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:alpha="0"/>
+    <LinearLayout
+        android:id="@+id/ll_loading_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#000000"
+        android:gravity="center"
+        android:visibility="invisible">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="正在玩命加载中... ..."
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/pb_buffer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>
+
