@@ -1,6 +1,6 @@
 package com.example.rumens.showtime.inject.modules;
 
-import com.example.rumens.showtime.adapter.BookTypeListAdapter;
+import com.example.rumens.showtime.adapter.BookRecommendListAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.base.IBasePresenter;
 import com.example.rumens.showtime.inject.PerFragment;
@@ -33,6 +33,6 @@ public class BookTypeListModule {
     @PerFragment
     @Provides
     public BaseQuickAdapter provideAdapter() {
-        return new BookTypeListAdapter(mView.getContext(),mBookListType);
+        return new BookRecommendListAdapter(mView.getContext(),mBookListType);
     }
 }

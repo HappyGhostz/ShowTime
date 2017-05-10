@@ -2,9 +2,6 @@ package com.example.rumens.showtime.utils;
 
 import com.example.rumens.showtime.App;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Zhaochen Ping
  * @create 2017/5/9

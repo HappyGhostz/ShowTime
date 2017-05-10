@@ -12,7 +12,7 @@ import dagger.Component;
  * @description
  */
 @PerFragment
-@Component(dependencies = AppComponent.class,modules = BookTypeListModule.class)
+@Component(dependencies = AppComponent.class, modules = BookTypeListModule.class)
 public interface BookTypeListComponent {
     void inject(BookTypeListFragment fragment);
 }

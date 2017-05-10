@@ -1,15 +1,12 @@
 package com.example.rumens.showtime.reader;
 
-import android.os.Bundle;
+
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.ViewPagerAdapter;
@@ -20,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * @author Zhaochen Ping
@@ -34,7 +29,7 @@ public class ReaderFragment extends BaseFragment {
     @BindView(R.id.et_input)
     EditText mEtInput;
     @BindView(R.id.bt_search)
-    Button mBtSearch;
+    ImageButton mBtSearch;
     @BindView(R.id.tool_bar)
     Toolbar mToolBar;
     @BindView(R.id.tab_new_layout)

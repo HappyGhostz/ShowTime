@@ -12,12 +12,11 @@ import com.example.rumens.showtime.local.DaoSession;
 import com.example.rumens.showtime.local.daoHapper.NewsTypeDao;
 import com.example.rumens.showtime.rxBus.RxBus;
 import com.example.rumens.showtime.utils.RetrofitService;
+import com.example.rumens.showtime.utils.SharedPreferencesUtil;
 import com.tencent.smtt.sdk.QbSdk;
 import com.tencent.smtt.sdk.TbsListener;
 
 import org.greenrobot.greendao.database.Database;
-
-import java.io.File;
 
 
 /**
@@ -33,7 +32,7 @@ public class App extends Application{
     private DaoSession mDaoSession;
     private RxBus mRxBus = new RxBus();
     public Context applicationContext;
-    private Context mContext;
+    private static Context mContext;
 
     @Override
     public void onCreate() {
@@ -97,6 +96,8 @@ public class App extends Application{
 //        DownloadConfig config = new DownloadConfig.Builder()
 //                .setDownloadDir(PreferencesUtils.getSavePath(getApplication()) + File.separator + "video/").build();
 //        FileDownloader.setConfig(config);
+        SharedPreferencesUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
+
     }
 
     private void initDataDao() {
@@ -121,6 +122,10 @@ public class App extends Application{
     }
     public  Application getApplication() {
         return application;
+    }
+
+    public static Context getAppContext(){
+        return mContext;
     }
 
 }

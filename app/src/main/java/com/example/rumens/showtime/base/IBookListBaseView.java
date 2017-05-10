@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public interface IBookListBaseView extends IBaseView{
-    void showRecommendList(List<Recommend.RecommendBooks> list);
+    void loadRecommendList(List<Recommend.RecommendBooks> list);
 
 //    void showBookToc(String bookId, List<BookMixAToc.mixToc.Chapters> list);
 }
