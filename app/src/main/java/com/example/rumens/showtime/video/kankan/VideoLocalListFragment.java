@@ -18,6 +18,8 @@ import com.example.rumens.showtime.utils.MyAsyncQueryHandler;
 import com.example.rumens.showtime.video.videoliveplay.VideoPlayActivity;
 import com.example.rumens.showtime.video.videonetplay.VideoNetPlayActivity;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 
 /**
@@ -31,6 +33,7 @@ public class VideoLocalListFragment extends BaseFragment<IBasePresenter> {
     @BindView(R.id.video_listView)
     ListView mVideoListView;
     private VideoLocalListAdapter adapter;
+    private String mVideoType;
 
 
     @Override
@@ -45,6 +48,7 @@ public class VideoLocalListFragment extends BaseFragment<IBasePresenter> {
 
     @Override
     protected void initViews() {
+        mVideoType = getArguments().getString(VIDEO_LOCAL_TYPE);
         ContentResolver resolver = getContext().getContentResolver();
         MyAsyncQueryHandler queryHandler = new MyAsyncQueryHandler(resolver);
         adapter = new VideoLocalListAdapter(getContext(), null, false);
@@ -59,10 +63,21 @@ public class VideoLocalListFragment extends BaseFragment<IBasePresenter> {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = adapter.getCursor();
-                VideoLocalListItemBean videoLocalListItem = VideoLocalListItemBean.getInstanceFromCursor(cursor);
-                VideoNetPlayActivity.lunchLocalVideo(mContext,videoLocalListItem);
+                cursor.moveToPosition(position);
+                ArrayList<VideoLocalListItemBean> videoLocalListItem =getVideoLocalItem(cursor);
+                VideoNetPlayActivity.lunchLocalVideo(mContext,videoLocalListItem,position,mVideoType);
             }
         });
+    }
+
+    private ArrayList<VideoLocalListItemBean> getVideoLocalItem(Cursor cursor) {
+        ArrayList<VideoLocalListItemBean> videoList = new ArrayList<>();
+        cursor.moveToPosition(-1);
+        while (cursor.moveToNext()){
+            VideoLocalListItemBean itemBean = VideoLocalListItemBean.getInstanceFromCursor(cursor);
+            videoList.add(itemBean);
+        }
+        return videoList;
     }
 
     @Override
