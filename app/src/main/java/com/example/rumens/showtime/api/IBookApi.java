@@ -16,14 +16,11 @@
 package com.example.rumens.showtime.api;
 
 
-
+import com.example.rumens.showtime.api.bean.BookHelp;
+import com.example.rumens.showtime.api.bean.BookHelpList;
 import com.example.rumens.showtime.api.bean.Recommend;
 
-import java.util.List;
-
-import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -35,8 +32,34 @@ import rx.Observable;
  * @date 2016/8/3.
  */
 public interface IBookApi {
+    public static int start = 0;
+    public static int limit = 20;
     @GET("/book/recommend")
     Observable<Recommend> getRecomend(@Query("gender") String gender);
+    /**
+     * 获取书荒区帖子列表
+     * 全部、默认排序  http://api.zhuishushenqi.com/post/help?duration=all&sort=updated&start=0&limit=20&distillate=
+     * 精品、默认排序  http://api.zhuishushenqi.com/post/help?duration=all&sort=updated&start=0&limit=20&distillate=true
+     *
+     * @param duration   all
+     * @param sort       updated(默认排序)
+     *                   created(最新发布)
+     *                   comment-count(最多评论)
+     * @param start      0
+     * @param limit      20
+     * @param distillate true(精品) 、空字符（全部）
+     * @return
+     */
+    @GET("/post/help")
+    Observable<BookHelpList> getBookHelpList(@Query("duration") String duration, @Query("sort") String sort, @Query("start") String start, @Query("limit") String limit, @Query("distillate") String distillate);
+    /**
+     * 获取书荒区帖子详情
+     *
+     * @param helpId->_id
+     * @return
+     */
+    @GET("/post/help/{helpId}")
+    Observable<BookHelp> getBookHelpDetail(@Path("helpId") String helpId);
     /*
 
     *//**

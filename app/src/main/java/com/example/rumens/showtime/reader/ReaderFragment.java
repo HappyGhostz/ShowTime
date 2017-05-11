@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.ViewPagerAdapter;
 import com.example.rumens.showtime.base.BaseFragment;
+import com.example.rumens.showtime.reader.bookclassify.BookClassifyListFragment;
 import com.example.rumens.showtime.reader.booklist.BookTypeListFragment;
 
 import java.util.ArrayList;
@@ -68,9 +69,9 @@ public class ReaderFragment extends BaseFragment {
         titles.add("排行榜");
         fragments = new ArrayList<>();
         fragments.add(BookTypeListFragment.lunch("书架"));
-        fragments.add(BookTypeListFragment.lunch("分类"));
+        fragments.add(BookClassifyListFragment.lunch("分类"));
         fragments.add(BookTypeListFragment.lunch("社区"));
-        fragments.add(BookTypeListFragment.lunch("排行榜"));
+        fragments.add(BookClassifyListFragment.lunch("排行榜"));
 
     }
 

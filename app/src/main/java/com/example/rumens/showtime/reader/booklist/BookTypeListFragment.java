@@ -1,12 +1,15 @@
 package com.example.rumens.showtime.reader.booklist;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.helper.RecyclerViewHelper;
+import com.example.rumens.showtime.adapter.listener.OnRequestDataListener;
+import com.example.rumens.showtime.api.bean.BookHelpList;
 import com.example.rumens.showtime.api.bean.Recommend;
 import com.example.rumens.showtime.base.BaseFragment;
 import com.example.rumens.showtime.base.IBasePresenter;
@@ -42,7 +45,6 @@ public class BookTypeListFragment extends BaseFragment<IBasePresenter> implement
 
     @Override
     protected void initInjector() {
-        mBookListType = getArguments().getString(BOOK_LIST_TYPE);
         DaggerBookTypeListComponent.builder()
                 .appComponent(getAppComponent())
                 .bookTypeListModule(new BookTypeListModule(this, mBookListType))
@@ -52,7 +54,13 @@ public class BookTypeListFragment extends BaseFragment<IBasePresenter> implement
 
     @Override
     protected void initViews() {
-        RecyclerViewHelper.initRecyclerViewV(mContext,mRecyclerview,true,mRecommendAdapter);
+        RecyclerViewHelper.initRecyclerViewV(mContext,mRecyclerview,true,mRecommendAdapter );
+        mRecommendAdapter.setRequestDataListener(new OnRequestDataListener() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.getMoreData();
+                }
+        });
     }
 
     @Override
@@ -71,5 +79,27 @@ public class BookTypeListFragment extends BaseFragment<IBasePresenter> implement
     @Override
     public void loadRecommendList(List<Recommend.RecommendBooks> list) {
         mRecommendAdapter.updateItems(list);
+    }
+
+    @Override
+    public void loadCommunityList(List<BookHelpList.HelpsBean> list) {
+        mRecommendAdapter.updateItems(list);
+    }
+
+    @Override
+    public void loadMoreCommunity(List<BookHelpList.HelpsBean> list) {
+        mRecommendAdapter.loadComplete();
+        mRecommendAdapter.addItems(list);
+    }
+
+    @Override
+    public void loadNoData() {
+        mRecommendAdapter.loadAbnormal();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        mBookListType = getArguments().getString(BOOK_LIST_TYPE);
+        super.onCreate(savedInstanceState);
     }
 }

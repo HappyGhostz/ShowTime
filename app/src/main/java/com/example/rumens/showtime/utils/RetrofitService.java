@@ -11,6 +11,7 @@ import com.example.rumens.showtime.api.IDouyuVideoApi;
 import com.example.rumens.showtime.api.ILivesApi;
 import com.example.rumens.showtime.api.INewsApi;
 import com.example.rumens.showtime.api.IWelfareApi;
+import com.example.rumens.showtime.api.bean.BookHelpList;
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.api.bean.LiveBaseBean;
 import com.example.rumens.showtime.api.bean.LiveDetailBean;
@@ -415,6 +416,12 @@ public class RetrofitService {
     public static Observable<Recommend> getBookRackListInfo(String gender){
         return sBookService.getRecomend(gender);
 
+    }
+    /**
+     * 获取社区书荒区列表
+     */
+    public static Observable<BookHelpList>getBookHelpListInfo(String start, String limit){
+        return sBookService.getBookHelpList("all","updated",start,limit,"");
     }
 
     /******************************************* 转换器 **********************************************/

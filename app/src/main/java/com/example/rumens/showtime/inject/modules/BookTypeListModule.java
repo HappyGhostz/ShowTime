@@ -1,6 +1,9 @@
 package com.example.rumens.showtime.inject.modules;
 
+import android.text.TextUtils;
+
 import com.example.rumens.showtime.adapter.BookRecommendListAdapter;
+import com.example.rumens.showtime.adapter.CommunityListAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.base.IBasePresenter;
 import com.example.rumens.showtime.inject.PerFragment;
@@ -33,6 +36,12 @@ public class BookTypeListModule {
     @PerFragment
     @Provides
     public BaseQuickAdapter provideAdapter() {
-        return new BookRecommendListAdapter(mView.getContext(),mBookListType);
+        if(TextUtils.equals(mBookListType,"书架")){
+            return new BookRecommendListAdapter(mView.getContext(),mBookListType);
+        }else if(TextUtils.equals(mBookListType,"社区")){
+            return new CommunityListAdapter(mView.getContext());
+        }
+        return null;
+
     }
 }

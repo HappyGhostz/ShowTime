@@ -51,4 +51,7 @@
         <item>1080P</item>
     </string-array>
 
+
+    <string name="book_detail_user_lv">&#160;lv.%1$d</string>
+
 </resources>

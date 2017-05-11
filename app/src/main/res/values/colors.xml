@@ -61,6 +61,7 @@
     <color name="background_gray_light">#ffbababa</color>
 
     <color name="recover_screen_text">#f06292</color>
+    <color name="light_red">#EC4A48</color>
     <color name="control_bar_bg">#e0222222</color>
 
     <color name="titleSelect">#2DAA73</color>
@@ -82,5 +83,6 @@
     <color name="common_divider_narrow">#E3E3E3</color>
     <!--通用分割线粗-->
     <color name="common_divider_wide">@color/light_white</color>
+    <color name="light_coffee">#A58D5E</color>
 
 </resources>
