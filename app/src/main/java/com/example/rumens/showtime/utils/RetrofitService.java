@@ -12,6 +12,7 @@ import com.example.rumens.showtime.api.ILivesApi;
 import com.example.rumens.showtime.api.INewsApi;
 import com.example.rumens.showtime.api.IWelfareApi;
 import com.example.rumens.showtime.api.bean.BookHelpList;
+import com.example.rumens.showtime.api.bean.CategoryList;
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.api.bean.LiveBaseBean;
 import com.example.rumens.showtime.api.bean.LiveDetailBean;
@@ -422,6 +423,12 @@ public class RetrofitService {
      */
     public static Observable<BookHelpList>getBookHelpListInfo(String start, String limit){
         return sBookService.getBookHelpList("all","updated",start,limit,"");
+    }
+    /**
+     * 获取分类
+     */
+    public static Observable<CategoryList>getBookClassifyInfo(){
+        return sBookService.getCategoryList();
     }
 
     /******************************************* 转换器 **********************************************/

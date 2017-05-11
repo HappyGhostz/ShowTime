@@ -18,6 +18,7 @@ package com.example.rumens.showtime.api;
 
 import com.example.rumens.showtime.api.bean.BookHelp;
 import com.example.rumens.showtime.api.bean.BookHelpList;
+import com.example.rumens.showtime.api.bean.CategoryList;
 import com.example.rumens.showtime.api.bean.Recommend;
 
 import retrofit2.http.GET;
@@ -36,6 +37,13 @@ public interface IBookApi {
     public static int limit = 20;
     @GET("/book/recommend")
     Observable<Recommend> getRecomend(@Query("gender") String gender);
+    /**
+     * 获取分类
+     *
+     * @return
+     */
+    @GET("/cats/lv2/statistics")
+    Observable<CategoryList> getCategoryList();
     /**
      * 获取书荒区帖子列表
      * 全部、默认排序  http://api.zhuishushenqi.com/post/help?duration=all&sort=updated&start=0&limit=20&distillate=
@@ -195,14 +203,6 @@ public interface IBookApi {
      *//*
     @GET("/book-list/{bookListId}")
     Observable<BookListDetail> getBookListDetail(@Path("bookListId") String bookListId);
-
-    *//**
-     * 获取分类
-     *
-     * @return
-     *//*
-    @GET("/cats/lv2/statistics")
-    Observable<CategoryList> getCategoryList();
 
     *//**
      * 获取二级分类
