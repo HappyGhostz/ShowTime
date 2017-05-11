@@ -14,6 +14,7 @@ import com.example.rumens.showtime.utils.BookSettingManager;
 import com.example.rumens.showtime.utils.Constant;
 import com.example.rumens.showtime.utils.FileUtils;
 import com.example.rumens.showtime.utils.FormatUtils;
+import com.example.rumens.showtime.utils.ImageLoader;
 
 import java.text.NumberFormat;
 
@@ -68,8 +69,7 @@ public class BookRecommendListAdapter extends BaseQuickAdapter<Recommend.Recomme
             }
         } else if (!BookSettingManager.getInstance().isNoneCover()) {
             ImageView image = holder.getView(R.id.ivRecommendCover);
-            holder.setImageResource(R.id.ivRecommendCover, R.drawable.cover_default);
-//            ImageLoader.loadCenterCrop(mContext,Constant.IMG_BASE_URL + item.cover,image, R.drawable.cover_default);
+            ImageLoader.loadCenterCrop(mContext,Constant.IMG_BASE_URL + item.cover,image, R.drawable.cover_default);
         } else {
             holder.setImageResource(R.id.ivRecommendCover, R.drawable.cover_default);
         }

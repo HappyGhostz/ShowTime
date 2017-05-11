@@ -52,7 +52,7 @@ public class BookTypeListFragment extends BaseFragment<IBasePresenter> implement
 
     @Override
     protected void initViews() {
-        RecyclerViewHelper.initRecyclerViewV(mContext,mRecyclerview,mRecommendAdapter);
+        RecyclerViewHelper.initRecyclerViewV(mContext,mRecyclerview,true,mRecommendAdapter);
     }
 
     @Override

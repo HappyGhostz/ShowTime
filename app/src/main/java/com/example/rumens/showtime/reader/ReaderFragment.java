@@ -63,13 +63,13 @@ public class ReaderFragment extends BaseFragment {
     private void initData() {
         titles = new ArrayList<>();
         titles.add("书架");
-        titles.add("社区");
         titles.add("分类");
+        titles.add("社区");
         titles.add("排行榜");
         fragments = new ArrayList<>();
         fragments.add(BookTypeListFragment.lunch("书架"));
-        fragments.add(BookTypeListFragment.lunch("社区"));
         fragments.add(BookTypeListFragment.lunch("分类"));
+        fragments.add(BookTypeListFragment.lunch("社区"));
         fragments.add(BookTypeListFragment.lunch("排行榜"));
 
     }

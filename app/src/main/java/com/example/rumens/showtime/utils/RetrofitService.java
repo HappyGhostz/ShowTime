@@ -26,10 +26,6 @@ import com.example.rumens.showtime.api.bean.WelfarePhotoInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoList;
 import com.example.rumens.showtime.local.BeautyPhoto;
 import com.example.rumens.showtime.local.VideoInfo;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -417,11 +413,8 @@ public class RetrofitService {
      * 获取书架列表
      */
     public static Observable<Recommend> getBookRackListInfo(String gender){
-        return sBookService.getRecomend(gender)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread());
+        return sBookService.getRecomend(gender);
+
     }
 
     /******************************************* 转换器 **********************************************/

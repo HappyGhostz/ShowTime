@@ -39,14 +39,14 @@ public class BookTypeListPresenter implements IBasePresenter {
         if(TextUtils.equals(mBookListType,"书架")){
             String key = StringUtils.creatAcacheKey("recommend-list", "male");
             Observable<Recommend> fromNetWork = RetrofitService.getBookRackListInfo("male")
+                    .compose(RxBookUtil.<Recommend>rxCacheListHelper(key));
+            Observable.concat(RxBookUtil.rxCreateDiskObservable(key, Recommend.class), fromNetWork)
                     .doOnSubscribe(new Action0() {
                         @Override
                         public void call() {
                             mView.showLoading();
                         }
                     })
-                    .compose(RxBookUtil.<Recommend>rxCacheListHelper(key));
-            Observable.concat(RxBookUtil.rxCreateDiskObservable(key, Recommend.class), fromNetWork)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<Recommend>() {
 
