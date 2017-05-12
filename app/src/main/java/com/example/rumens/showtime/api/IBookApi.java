@@ -19,6 +19,7 @@ package com.example.rumens.showtime.api;
 import com.example.rumens.showtime.api.bean.BookHelp;
 import com.example.rumens.showtime.api.bean.BookHelpList;
 import com.example.rumens.showtime.api.bean.CategoryList;
+import com.example.rumens.showtime.api.bean.RankingListBean;
 import com.example.rumens.showtime.api.bean.Recommend;
 
 import retrofit2.http.GET;
@@ -68,6 +69,13 @@ public interface IBookApi {
      */
     @GET("/post/help/{helpId}")
     Observable<BookHelp> getBookHelpDetail(@Path("helpId") String helpId);
+    /**
+            * 获取所有排行榜
+     *
+             * @return
+             */
+    @GET("/ranking/gender")
+    Observable<RankingListBean> getRanking();
     /*
 
     *//**
@@ -155,13 +163,7 @@ public interface IBookApi {
     @GET("/book/by-tags")
     Observable<BooksByTag> getBooksByTag(@Query("tags") String tags, @Query("start") String start, @Query("limit") String limit);
 
-    *//**
-     * 获取所有排行榜
-     *
-     * @return
-     *//*
-    @GET("/ranking/gender")
-    Observable<RankingList> getRanking();
+
 
     *//**
      * 获取单一排行榜

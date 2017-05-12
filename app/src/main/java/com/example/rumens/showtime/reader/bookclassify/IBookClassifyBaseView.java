@@ -11,4 +11,5 @@ import com.example.rumens.showtime.base.IBaseView;
 
 public interface IBookClassifyBaseView extends IBaseView{
     void LoadCategoryList(CategoryList data);
+
 }

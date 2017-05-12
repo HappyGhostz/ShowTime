@@ -6,14 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.rumens.showtime.R;
+import com.example.rumens.showtime.adapter.BookRankListAdapter;
 import com.example.rumens.showtime.adapter.ClassifyListAdapter;
+import com.example.rumens.showtime.adapter.helper.RecyclerViewHelper;
 import com.example.rumens.showtime.api.bean.CategoryList;
 import com.example.rumens.showtime.base.BaseFragment;
 import com.example.rumens.showtime.base.IBasePresenter;
 import com.example.rumens.showtime.inject.component.DaggerBookClassifyListComponent;
 import com.example.rumens.showtime.inject.modules.BookClassifyListModule;
 
-import javax.inject.Inject;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -30,12 +32,21 @@ public class BookClassifyListFragment extends BaseFragment<IBasePresenter> imple
     @BindView(R.id.rv_unchecked_list)
     RecyclerView mRvFemaleList;
     private String mBookType;
-    @Inject
-    ClassifyListAdapter adapter;
+    private ClassifyListAdapter mMaleAdapter;
+    private ClassifyListAdapter mFemaleAdapter;
+    private BookRankListAdapter mRankMaleAdapter;
+    private BookRankListAdapter mRankFemaleAdapter;
+    //    @Inject
+//    BaseQuickAdapter mMaleAdapter;
+//    @Inject
+//    BaseQuickAdapter mFemaleAdapter;
 
     @Override
     public void LoadCategoryList(CategoryList data) {
-
+        List<CategoryList.MaleBean> male = data.male;
+        mMaleAdapter.updateItems(male);
+        List<CategoryList.MaleBean> female = data.female;
+        mFemaleAdapter.updateItems(female);
     }
 
     @Override
@@ -54,12 +65,16 @@ public class BookClassifyListFragment extends BaseFragment<IBasePresenter> imple
 
     @Override
     protected void initViews() {
+            mMaleAdapter = new ClassifyListAdapter(mContext);
+            mFemaleAdapter = new ClassifyListAdapter(mContext);
+            RecyclerViewHelper.initRecyclerViewG(getActivity(),mRvMaleList,true, mMaleAdapter,3);
+            RecyclerViewHelper.initRecyclerViewG(getActivity(),mRvFemaleList,true, mFemaleAdapter,3);
 
     }
 
     @Override
     protected void updateViews() {
-
+        mPresenter.getData();
     }
 
     public static Fragment lunch(String mBookType) {

@@ -29,38 +29,39 @@ public class BookClassifyListPresenter implements IBasePresenter {
 
     @Override
     public void getData() {
-        String key = StringUtils.creatAcacheKey("book-category-list");
-        Observable<CategoryList> fromNetWork = RetrofitService.getBookClassifyInfo()
-                .compose(RxBookUtil.<CategoryList>rxCacheBeanHelper(key));
-        Observable.concat(RxBookUtil.rxCreateDiskObservable(key, CategoryList.class), fromNetWork)
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mView.showLoading();
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<CategoryList>() {
-                    @Override
-                    public void onCompleted() {
-                        mView.hideLoading();
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.showNetError(new EmptyErrLayout.OnRetryListener() {
-                            @Override
-                            public void onRetry() {
-                                getData();
-                            }
-                        });
-                    }
+            String key = StringUtils.creatAcacheKey("book-category-list");
+            Observable<CategoryList> fromNetWork = RetrofitService.getBookClassifyInfo()
+                    .compose(RxBookUtil.<CategoryList>rxCacheBeanHelper(key));
+            Observable.concat(RxBookUtil.rxCreateDiskObservable(key, CategoryList.class), fromNetWork)
+                    .doOnSubscribe(new Action0() {
+                        @Override
+                        public void call() {
+                            mView.showLoading();
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<CategoryList>() {
+                        @Override
+                        public void onCompleted() {
+                            mView.hideLoading();
+                        }
 
-                    @Override
-                    public void onNext(CategoryList categoryList) {
-                        mView.LoadCategoryList(categoryList);
-                    }
-                });
+                        @Override
+                        public void onError(Throwable e) {
+                            mView.showNetError(new EmptyErrLayout.OnRetryListener() {
+                                @Override
+                                public void onRetry() {
+                                    getData();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onNext(CategoryList categoryList) {
+                            mView.LoadCategoryList(categoryList);
+                        }
+                    });
     }
 
     @Override

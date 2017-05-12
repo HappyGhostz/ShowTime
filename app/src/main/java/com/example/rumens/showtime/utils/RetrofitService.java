@@ -22,6 +22,7 @@ import com.example.rumens.showtime.api.bean.NewsInfo;
 import com.example.rumens.showtime.api.bean.OldLiveVideoInfo;
 import com.example.rumens.showtime.api.bean.PhotoInfo;
 import com.example.rumens.showtime.api.bean.PhotoSetInfo;
+import com.example.rumens.showtime.api.bean.RankingListBean;
 import com.example.rumens.showtime.api.bean.Recommend;
 import com.example.rumens.showtime.api.bean.SpecialInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoInfo;
@@ -429,6 +430,12 @@ public class RetrofitService {
      */
     public static Observable<CategoryList>getBookClassifyInfo(){
         return sBookService.getCategoryList();
+    }
+    /**
+     * 获取所有排行榜
+     */
+    public static Observable<RankingListBean>getBookRankInfo(){
+        return sBookService.getRanking();
     }
 
     /******************************************* 转换器 **********************************************/

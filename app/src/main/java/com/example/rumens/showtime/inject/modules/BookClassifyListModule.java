@@ -33,7 +33,7 @@ public class BookClassifyListModule {
     @PerFragment
     @Provides
     public BaseQuickAdapter provideAdapter() {
-        return new ClassifyListAdapter(mView.getContext());
+            return new ClassifyListAdapter(mView.getContext());
 
     }
 }
