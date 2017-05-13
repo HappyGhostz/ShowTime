@@ -2,6 +2,7 @@ package com.example.rumens.showtime.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -10,6 +11,7 @@ import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseViewHolder;
 import com.example.rumens.showtime.api.bean.Recommend;
+import com.example.rumens.showtime.reader.bookread.ReadActivity;
 import com.example.rumens.showtime.utils.BookSettingManager;
 import com.example.rumens.showtime.utils.Constant;
 import com.example.rumens.showtime.utils.FileUtils;
@@ -81,6 +83,12 @@ public class BookRecommendListAdapter extends BaseQuickAdapter<Recommend.Recomme
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
                 item.isSeleted = isChecked;
+            }
+        });
+        holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReadActivity.lunch(mContext,item);
             }
         });
     }

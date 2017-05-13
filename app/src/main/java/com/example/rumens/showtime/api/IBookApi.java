@@ -18,7 +18,9 @@ package com.example.rumens.showtime.api;
 
 import com.example.rumens.showtime.api.bean.BookHelp;
 import com.example.rumens.showtime.api.bean.BookHelpList;
+import com.example.rumens.showtime.api.bean.BookMixATocBean;
 import com.example.rumens.showtime.api.bean.CategoryList;
+import com.example.rumens.showtime.api.bean.ChapterReadBean;
 import com.example.rumens.showtime.api.bean.RankingListBean;
 import com.example.rumens.showtime.api.bean.Recommend;
 
@@ -76,6 +78,12 @@ public interface IBookApi {
              */
     @GET("/ranking/gender")
     Observable<RankingListBean> getRanking();
+
+    @GET("/mix-atoc/{bookId}")
+    Observable<BookMixATocBean> getBookMixAToc(@Path("bookId") String bookId, @Query("view") String view);
+
+    @GET("http://chapter2.zhuishushenqi.com/chapter/{url}")
+    Observable<ChapterReadBean> getChapterRead(@Path("url") String url);
     /*
 
     *//**

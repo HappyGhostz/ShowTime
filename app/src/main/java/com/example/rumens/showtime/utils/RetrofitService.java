@@ -12,7 +12,9 @@ import com.example.rumens.showtime.api.ILivesApi;
 import com.example.rumens.showtime.api.INewsApi;
 import com.example.rumens.showtime.api.IWelfareApi;
 import com.example.rumens.showtime.api.bean.BookHelpList;
+import com.example.rumens.showtime.api.bean.BookMixATocBean;
 import com.example.rumens.showtime.api.bean.CategoryList;
+import com.example.rumens.showtime.api.bean.ChapterReadBean;
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.api.bean.LiveBaseBean;
 import com.example.rumens.showtime.api.bean.LiveDetailBean;
@@ -436,6 +438,18 @@ public class RetrofitService {
      */
     public static Observable<RankingListBean>getBookRankInfo(){
         return sBookService.getRanking();
+    }
+    /**
+     * 获取正版源
+     */
+    public static Observable<BookMixATocBean>getBookMixATocInfo(String bookId, String view){
+        return sBookService.getBookMixAToc(bookId,view);
+    }
+    /**
+     * 获取章节内容
+     */
+    public static Observable<ChapterReadBean>getBookChapterInfo(String url){
+        return sBookService.getChapterRead(url);
     }
 
     /******************************************* 转换器 **********************************************/

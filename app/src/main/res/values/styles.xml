@@ -85,5 +85,9 @@
         <item name="android:windowEnterAnimation">@anim/dialog_zoom_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_zoom_out</item>
     </style>
+    <style name="AppTheme.NoActionBar.FullScreen" parent="AppTheme.NoActionBar.FullScreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 
 </resources>

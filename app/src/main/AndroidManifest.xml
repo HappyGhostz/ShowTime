@@ -112,6 +112,18 @@
             <!--android:theme="@android:style/Theme.NoTitleBar"-->
             <!--android:windowSoftInputMode="stateAlwaysHidden"-->
              <!--/>-->
+        <activity android:name=".reader.bookread.ReadActivity"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -86,4 +86,7 @@
 
     <dimen name="edit_layout_height">50dp</dimen>
 
+    <dimen name="book_read_bottom_text">12dp</dimen>
+    <dimen name="book_read_top_text">16sp</dimen>
+
 </resources>
