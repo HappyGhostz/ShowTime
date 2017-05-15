@@ -1,6 +1,7 @@
 package com.example.rumens.showtime.reader;
 
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,6 +15,7 @@ import com.example.rumens.showtime.base.BaseFragment;
 import com.example.rumens.showtime.reader.bookclassify.BookClassifyListFragment;
 import com.example.rumens.showtime.reader.booklist.BookTypeListFragment;
 import com.example.rumens.showtime.reader.bookrank.BookRankListFragment;
+import com.example.rumens.showtime.reader.downloadservice.DownloadBookService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,7 @@ public class ReaderFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
+        getActivity().startService(new Intent(getActivity(), DownloadBookService.class));
         initToolBar(mToolBar, true, "小说");
         setHasOptionsMenu(true);
         pagerAdapter = new ViewPagerAdapter(getFragmentManager());
@@ -82,5 +85,12 @@ public class ReaderFragment extends BaseFragment {
         pagerAdapter.setItems(fragments,titles);
         mViewpager.setAdapter(pagerAdapter);
         mTabNewLayout.setupWithViewPager(mViewpager);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        DownloadBookService.cancel();
+        getActivity().stopService(new Intent(getActivity(), DownloadBookService.class));
     }
 }

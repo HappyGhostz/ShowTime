@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.BookRankListAdapter;
 import com.example.rumens.showtime.adapter.ClassifyListAdapter;
 import com.example.rumens.showtime.adapter.helper.RecyclerViewHelper;
+import com.example.rumens.showtime.adapter.listener.OnRecyclerViewItemClickListener;
 import com.example.rumens.showtime.api.bean.CategoryList;
 import com.example.rumens.showtime.base.BaseFragment;
 import com.example.rumens.showtime.base.IBasePresenter;
@@ -36,6 +38,7 @@ public class BookClassifyListFragment extends BaseFragment<IBasePresenter> imple
     private ClassifyListAdapter mFemaleAdapter;
     private BookRankListAdapter mRankMaleAdapter;
     private BookRankListAdapter mRankFemaleAdapter;
+    private CategoryList mData;
     //    @Inject
 //    BaseQuickAdapter mMaleAdapter;
 //    @Inject
@@ -43,6 +46,7 @@ public class BookClassifyListFragment extends BaseFragment<IBasePresenter> imple
 
     @Override
     public void LoadCategoryList(CategoryList data) {
+        mData=data;
         List<CategoryList.MaleBean> male = data.male;
         mMaleAdapter.updateItems(male);
         List<CategoryList.MaleBean> female = data.female;
@@ -65,10 +69,22 @@ public class BookClassifyListFragment extends BaseFragment<IBasePresenter> imple
 
     @Override
     protected void initViews() {
-            mMaleAdapter = new ClassifyListAdapter(mContext);
-            mFemaleAdapter = new ClassifyListAdapter(mContext);
-            RecyclerViewHelper.initRecyclerViewG(getActivity(),mRvMaleList,true, mMaleAdapter,3);
-            RecyclerViewHelper.initRecyclerViewG(getActivity(),mRvFemaleList,true, mFemaleAdapter,3);
+        mMaleAdapter = new ClassifyListAdapter(mContext);
+        mFemaleAdapter = new ClassifyListAdapter(mContext);
+        RecyclerViewHelper.initRecyclerViewG(getActivity(),mRvMaleList,true, mMaleAdapter,3);
+        mMaleAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                SubCategoryListActivity.startActivity(mContext, mData, "male");
+            }
+        });
+        RecyclerViewHelper.initRecyclerViewG(getActivity(),mRvFemaleList,true, mFemaleAdapter,3);
+        mFemaleAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                SubCategoryListActivity.startActivity(mContext, mData, "female");
+            }
+        });
 
     }
 

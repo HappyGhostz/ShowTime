@@ -28,5 +28,6 @@ public class ClassifyListAdapter extends BaseQuickAdapter< CategoryList.MaleBean
         holder.setText(R.id.tvName, item.name)
                 .setText(R.id.tvBookCount, String.format(mContext.getString(R.string
                         .category_book_count), item.bookCount));
+
     }
 }

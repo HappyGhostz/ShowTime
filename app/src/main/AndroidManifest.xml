@@ -27,7 +27,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/BaseTheme">
-        <activity android:name=".home.SplashActivity">
+        <activity android:name=".home.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -115,7 +116,7 @@
         <activity android:name=".reader.bookread.ReadActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
-            >
+            android:theme="@style/AppTheme.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -124,6 +125,8 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity android:name=".reader.bookclassify.SubCategoryListActivity"/>
+        <service android:name=".reader.downloadservice.DownloadBookService" />
     </application>
 
 </manifest>

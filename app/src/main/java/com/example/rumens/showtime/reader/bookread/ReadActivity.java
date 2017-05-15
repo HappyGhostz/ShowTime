@@ -43,6 +43,8 @@ import com.example.rumens.showtime.base.BaseActivity;
 import com.example.rumens.showtime.entity.ReadTheme;
 import com.example.rumens.showtime.inject.component.DaggerReadBookComponent;
 import com.example.rumens.showtime.inject.modules.ReadBookModule;
+import com.example.rumens.showtime.reader.downloadservice.DownloadBookService;
+import com.example.rumens.showtime.reader.downloadservice.DownloadQueue;
 import com.example.rumens.showtime.rxBus.EventManager;
 import com.example.rumens.showtime.utils.CacheManager;
 import com.example.rumens.showtime.utils.CollectionsManager;
@@ -52,6 +54,7 @@ import com.example.rumens.showtime.utils.FormatUtils;
 import com.example.rumens.showtime.utils.ScreenUtils;
 import com.example.rumens.showtime.utils.SettingManager;
 import com.example.rumens.showtime.utils.SharedPreferencesUtil;
+import com.example.rumens.showtime.utils.StatusBarCompat;
 import com.example.rumens.showtime.utils.ThemeManager;
 import com.example.rumens.showtime.utils.ToastUtils;
 import com.example.rumens.showtime.widget.readview.OnReadStateChangeListener;
@@ -190,11 +193,11 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
 
     @Override
     protected void updateViews() {
+        hideStatusBar();
         decodeView = getWindow().getDecorView();
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mLlBookReadTop.getLayoutParams();
-        params.topMargin = ScreenUtils.getStatusBarHeight(this) - 2;
-        mLlBookReadTop.setLayoutParams(params);
-
+//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mLlBookReadTop.getLayoutParams();
+//        params.topMargin = ScreenUtils.getStatusBarHeight(this) - 2;
+//        mLlBookReadTop.setLayoutParams(params);
         initTocList();
 
         initAASet();
@@ -245,10 +248,12 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
         });
     }
 
-    private synchronized void hideReadBar() {
-        gone(mTvDownloadProgress, mLlBookReadBottom, mLlBookReadTop, mRlReadAaSet, mRlReadMark);
-//        hideStatusBar();
-        decodeView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+
+
+    private void hideStatusBar() {
+        WindowManager.LayoutParams attrs = getWindow().getAttributes();
+        attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        getWindow().setAttributes(attrs);
     }
 
     /**
@@ -316,9 +321,8 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
         gvAdapter.select(curTheme);
 
         mPageWidget.setTheme(isNight ? ThemeManager.NIGHT : curTheme);
-        mPageWidget.setTextColor(ContextCompat.getColor(mContext, isNight ? R.color.chapter_content_night : R.color.chapter_content_day),
-                ContextCompat.getColor(mContext, isNight ? R.color.chapter_title_night : R.color.chapter_title_day));
-
+        mPageWidget.setTextColor(ContextCompat.getColor(this, isNight ? R.color.chapter_content_night : R.color.chapter_content_day),
+                ContextCompat.getColor(this, isNight ? R.color.chapter_title_night : R.color.chapter_title_day));
         mTvBookReadMode.setText(getString(isNight ? R.string.book_read_mode_day_manual_setting
                 : R.string.book_read_mode_night_manual_setting));
         Drawable drawable = ContextCompat.getDrawable(this, isNight ? R.mipmap.ic_menu_mode_day_manual
@@ -414,7 +418,7 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
         ((Activity) mContext).overridePendingTransition(R.anim.fade_entry, R.anim.hold);
     }
 
-    @OnClick({R.id.tvBookReadTocTitle, R.id.tvBookReadReading, R.id.tvBookReadCommunity, R.id.tvBookReadIntroduce, R.id.tvBookReadSource, R.id.tvDownloadProgress, R.id.tvFontsizeMinus, R.id.tvAddMark, R.id.tvClear, R.id.tvBookReadMode, R.id.tvBookReadSettings, R.id.tvBookReadDownload, R.id.tvBookMark, R.id.tvBookReadToc})
+    @OnClick({R.id.ivBack,R.id.tvBookReadTocTitle, R.id.tvBookReadReading, R.id.tvBookReadCommunity, R.id.tvBookReadIntroduce, R.id.tvBookReadSource, R.id.tvDownloadProgress, R.id.tvFontsizeMinus, R.id.tvAddMark, R.id.tvClear, R.id.tvBookReadMode, R.id.tvBookReadSettings, R.id.tvBookReadDownload, R.id.tvBookMark, R.id.tvBookReadToc})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
@@ -464,7 +468,7 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
                     if (isVisible(mRlReadAaSet)) {
                         gone(mRlReadAaSet);
                     } else {
-                        visible(mRlReadMark);
+                        visible(mRlReadAaSet);
                         gone(mRlReadMark);
                     }
                 }
@@ -568,13 +572,13 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-//                                DownloadBookService.post(new DownloadQueue(bookId, mChapterList, currentChapter + 1, currentChapter + 50));
+                                DownloadBookService.post(new DownloadQueue(mBookId, mChapterList, currentChapter + 1, currentChapter + 50));
                                 break;
                             case 1:
-//                                DownloadBookService.post(new DownloadQueue(bookId, mChapterList, currentChapter + 1, mChapterList.size()));
+                                DownloadBookService.post(new DownloadQueue(mBookId, mChapterList, currentChapter + 1, mChapterList.size()));
                                 break;
                             case 2:
-//                                DownloadBookService.post(new DownloadQueue(bookId, mChapterList, 1, mChapterList.size()));
+                                DownloadBookService.post(new DownloadQueue(mBookId, mChapterList, 1, mChapterList.size()));
                                 break;
                             default:
                                 break;
@@ -790,10 +794,23 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
             showReadBar();
         }
     }
-
+    private synchronized void hideReadBar() {
+        gone(mTvDownloadProgress, mLlBookReadBottom, mLlBookReadTop, mRlReadAaSet, mRlReadMark);
+        hideStatusBar();
+        decodeView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+    }
     private synchronized void showReadBar() {
         visible(mLlBookReadBottom, mLlBookReadTop);
-        decodeView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//        showStatusBar();
+        decodeView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+    private void showStatusBar() {
+        WindowManager.LayoutParams attrs = getWindow().getAttributes();
+        attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        getWindow().setAttributes(attrs);
+        View statusBarView = StatusBarCompat.compat(this, ContextCompat.getColor(this, R.color.chapter_title_night));
+//        statusBarView.setBackgroundColor(Color.RED);
     }
 
     private void visible(final View... views) {

@@ -40,6 +40,6 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@mipmap/ic_arrow_upward"
-        app:layout_behavior="com.dl7.mvp.widget.behavior.ScrollAwareFABBehavior"/>
+        app:layout_behavior="com.example.rumens.showtime.widget.ScrollAwareFABBehavior"/>
 </android.support.design.widget.CoordinatorLayout>
 
