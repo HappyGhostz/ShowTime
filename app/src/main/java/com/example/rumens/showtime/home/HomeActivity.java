@@ -14,16 +14,17 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.base.BaseActivity;
 import com.example.rumens.showtime.music.MusicFragment;
 import com.example.rumens.showtime.news.main.NewsMainFragment;
-import com.example.rumens.showtime.news.onenews.NewsListFragment;
-import com.example.rumens.showtime.news.onenews.TestFragment;
 import com.example.rumens.showtime.reader.ReaderFragment;
 import com.example.rumens.showtime.video.VideoFragment;
+
+import butterknife.BindView;
 
 /**
  * @author Zhaochen Ping
@@ -33,13 +34,15 @@ import com.example.rumens.showtime.video.VideoFragment;
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    @BindView(R.id.status_hight)
+    TextView mTvStatusHight;
     private DrawerLayout mDrawLayout;
     private FrameLayout mFlContent;
     private NavigationView mNvLeft;
 
-private final int[] pressedResId = new int[]{
-        R.drawable.sel_new_hometab, R.drawable.sel_videro_hometab, R.drawable.sel_music_hometab, R.drawable.sel_reader_hometab
-       };
+    private final int[] pressedResId = new int[]{
+            R.drawable.sel_new_hometab, R.drawable.sel_videro_hometab, R.drawable.sel_music_hometab, R.drawable.sel_reader_hometab
+    };
     private static final String[] mDataList = new String[]{"新闻", "视频", "音乐", "阅读"};
     private RadioGroup mRgTab;
     private long mExitTime = 0;
@@ -51,11 +54,19 @@ private final int[] pressedResId = new int[]{
 
     @Override
     protected void initView() {
+
         mDrawLayout = (DrawerLayout) findViewById(R.id.dl_root);
         mFlContent = (FrameLayout) findViewById(R.id.fl_rightcontent);
         mNvLeft = (NavigationView) findViewById(R.id.nv_left);
         mRgTab = (RadioGroup) findViewById(R.id.rg_Tab);
-
+        int statusBarHeight1 = -1;
+       //获取status_bar_height资源的ID
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            //根据资源ID获取响应的尺寸值
+            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
+        }
+        mTvStatusHight.setHeight(statusBarHeight1);
 
         initFragment();
         initData();
@@ -64,7 +75,7 @@ private final int[] pressedResId = new int[]{
     private void initFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         // 设置tag，不然下面 findFragmentByTag(tag)找不到
-        fragmentTransaction.add(R.id.fl_rightcontent,new NewsMainFragment(),"News");
+        fragmentTransaction.add(R.id.fl_rightcontent, new NewsMainFragment(), "News");
         fragmentTransaction.addToBackStack("News");
         fragmentTransaction.commit();
     }
@@ -82,18 +93,18 @@ private final int[] pressedResId = new int[]{
         mRgTab.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.rb_new:
-                        replaceFragment(R.id.fl_rightcontent,new NewsMainFragment(), mDataList[0]);
+                        replaceFragment(R.id.fl_rightcontent, new NewsMainFragment(), mDataList[0]);
                         break;
                     case R.id.rb_video:
-                        replaceFragment(R.id.fl_rightcontent,new VideoFragment(), mDataList[1]);
+                        replaceFragment(R.id.fl_rightcontent, new VideoFragment(), mDataList[1]);
                         break;
                     case R.id.rb_music:
-                        replaceFragment(R.id.fl_rightcontent,new MusicFragment(), mDataList[2]);
+                        replaceFragment(R.id.fl_rightcontent, new MusicFragment(), mDataList[2]);
                         break;
                     case R.id.rb_book:
-                        replaceFragment(R.id.fl_rightcontent,new ReaderFragment(), mDataList[3]);
+                        replaceFragment(R.id.fl_rightcontent, new ReaderFragment(), mDataList[3]);
                         break;
                 }
             }
@@ -171,4 +182,5 @@ private final int[] pressedResId = new int[]{
             finish();
         }
     }
+
 }

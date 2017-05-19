@@ -1,5 +1,6 @@
 package com.example.rumens.showtime.api.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * @description
  */
 
-public class CategoryList {
+public class CategoryList implements Serializable{
     /**
      * male : [{"name":"玄幻","bookCount":188244},{"name":"奇幻","bookCount":24183}]
      * ok : true
@@ -22,7 +23,7 @@ public class CategoryList {
 
     public List<MaleBean> female;
 
-    public static class MaleBean {
+    public static class MaleBean implements Serializable {
         public String name;
         public int bookCount;
     }

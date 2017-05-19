@@ -10,6 +10,7 @@ import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseViewHolder;
 import com.example.rumens.showtime.api.bean.BookHelpList;
+import com.example.rumens.showtime.reader.bookhelp.BookHelpDetailActivity;
 import com.example.rumens.showtime.utils.Constant;
 import com.example.rumens.showtime.utils.FormatUtils;
 import com.example.rumens.showtime.utils.ImageLoader;
@@ -31,7 +32,7 @@ public class CommunityListAdapter extends BaseQuickAdapter<BookHelpList.HelpsBea
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, BookHelpList.HelpsBean item) {
+    protected void convert(BaseViewHolder holder, final BookHelpList.HelpsBean item) {
         String latelyUpdate = "";
         if (!TextUtils.isEmpty(FormatUtils.getDescriptionTimeFromDateString(item.updated))) {
             latelyUpdate = FormatUtils.getDescriptionTimeFromDateString(item.updated) + ":";
@@ -53,5 +54,11 @@ public class CommunityListAdapter extends BaseQuickAdapter<BookHelpList.HelpsBea
         }
         ImageView imageView = holder.getView(R.id.ivBookCover);
         ImageLoader.loadCenterCrop(mContext, Constant.IMG_BASE_URL + item.author.avatar,imageView,R.mipmap.avatar_default);
+        holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BookHelpDetailActivity.lunch(mContext,item._id);
+            }
+        });
     }
 }

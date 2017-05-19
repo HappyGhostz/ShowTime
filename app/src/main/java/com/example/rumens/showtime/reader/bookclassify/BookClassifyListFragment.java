@@ -75,14 +75,20 @@ public class BookClassifyListFragment extends BaseFragment<IBasePresenter> imple
         mMaleAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                SubCategoryListActivity.startActivity(mContext, mData, "male");
+                List<CategoryList.MaleBean> data = mMaleAdapter.getData();
+                CategoryList.MaleBean maleBean = data.get(position);
+                String name = maleBean.name;
+                SubCategoryListActivity.startActivity(mContext, name, "male");
             }
         });
         RecyclerViewHelper.initRecyclerViewG(getActivity(),mRvFemaleList,true, mFemaleAdapter,3);
         mFemaleAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                SubCategoryListActivity.startActivity(mContext, mData, "female");
+                List<CategoryList.MaleBean> data = mFemaleAdapter.getData();
+                CategoryList.MaleBean maleBean = data.get(position);
+                String name = maleBean.name;
+                SubCategoryListActivity.startActivity(mContext, name, "female");
             }
         });
 

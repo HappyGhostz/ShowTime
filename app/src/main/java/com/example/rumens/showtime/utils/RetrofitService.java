@@ -11,11 +11,15 @@ import com.example.rumens.showtime.api.IDouyuVideoApi;
 import com.example.rumens.showtime.api.ILivesApi;
 import com.example.rumens.showtime.api.INewsApi;
 import com.example.rumens.showtime.api.IWelfareApi;
+import com.example.rumens.showtime.api.bean.BookDetail;
+import com.example.rumens.showtime.api.bean.BookHelp;
 import com.example.rumens.showtime.api.bean.BookHelpList;
 import com.example.rumens.showtime.api.bean.BookMixATocBean;
+import com.example.rumens.showtime.api.bean.BooksByCats;
 import com.example.rumens.showtime.api.bean.CategoryList;
 import com.example.rumens.showtime.api.bean.ChapterReadBean;
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
+import com.example.rumens.showtime.api.bean.HotReview;
 import com.example.rumens.showtime.api.bean.LiveBaseBean;
 import com.example.rumens.showtime.api.bean.LiveDetailBean;
 import com.example.rumens.showtime.api.bean.LiveListItemBean;
@@ -25,7 +29,9 @@ import com.example.rumens.showtime.api.bean.OldLiveVideoInfo;
 import com.example.rumens.showtime.api.bean.PhotoInfo;
 import com.example.rumens.showtime.api.bean.PhotoSetInfo;
 import com.example.rumens.showtime.api.bean.RankingListBean;
+import com.example.rumens.showtime.api.bean.Rankings;
 import com.example.rumens.showtime.api.bean.Recommend;
+import com.example.rumens.showtime.api.bean.RecommendBookList;
 import com.example.rumens.showtime.api.bean.SpecialInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoList;
@@ -451,6 +457,58 @@ public class RetrofitService {
     public static Observable<ChapterReadBean>getBookChapterInfo(String url){
         return sBookService.getChapterRead(url);
     }
+
+    /**
+     * 获取分类列表
+     * @param mSex
+     * @param mType
+     * @param mMajor
+     * @param mMinor
+     * @param start
+     * @param limit
+     * @return
+     */
+    public static Observable<BooksByCats> getBooksByCatsInfo(String mSex, String mType, String mMajor, String mMinor, int start, int limit) {
+        return sBookService.getBooksByCats(mSex,mType,mMajor,mMinor,start,limit);
+    }
+
+    /**
+     * 获取书籍详情
+     * @param mBookId
+     * @return
+     */
+    public static Observable<BookDetail> getBookDetailInfo(String mBookId) {
+        return sBookService.getBookDetail(mBookId);
+    }
+
+    public static Observable<HotReview> getHotReview(String mBookId) {
+        return sBookService.getHotReview(mBookId);
+    }
+
+    public static Observable<RecommendBookList> getRecommendBookList(String mBookId, String limit) {
+        return sBookService.getRecommendBookList(mBookId,limit);
+    }
+
+    public static Observable<BookHelp> getBookHelpDetail(String mHelpBeanId) {
+        return sBookService.getBookHelpDetail(mHelpBeanId);
+    }
+
+    public static Observable getBestComments(String mHelpBeanId) {
+        return sBookService.getBestComments(mHelpBeanId);
+    }
+
+    public static Observable getBookReviewComments(String mHelpBeanId, String start, String limit) {
+        return sBookService.getBookReviewComments(mHelpBeanId,start,limit);
+    }
+
+    public static Observable<Rankings> getRanking(String mRankType) {
+        return sBookService.getRanking(mRankType);
+    }
+
+    public static Observable getSearchResult(String mBookName) {
+        return sBookService.searchBooks(mBookName);
+    }
+
 
     /******************************************* 转换器 **********************************************/
 

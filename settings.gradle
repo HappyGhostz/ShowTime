@@ -1,1 +1,1 @@
-include ':app','InitActivity'
+include ':app', 'InitActivity'

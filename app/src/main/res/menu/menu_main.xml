@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/item_channel"
+        android:icon="@mipmap/ic_channel_manage"
+        android:title="翻页模式"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_sync_bookshelf"
+        android:title="@string/menu_main_sync_bookshelf"
+        android:icon="@drawable/home_menu_2"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_scan_local_book"
+        android:title="@string/menu_main_scan_local_book"
+        android:icon="@drawable/home_menu_3"
+        app:showAsAction="never" />
+
+</menu>

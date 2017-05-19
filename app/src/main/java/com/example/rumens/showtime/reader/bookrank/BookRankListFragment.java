@@ -127,9 +127,9 @@ public class BookRankListFragment extends BaseFragment<IBasePresenter> implement
         @Override
         public void onItemClick(View view, int position, RankingListBean.MaleBean data) {
             if (data.monthRank == null) {
-//                SubOtherHomeRankActivity.startActivity(mContext, data._id, data.title);
+                SubOtherHomeRankActivity.startActivity(mContext, data._id, data.title);
             } else {
-//                SubRankActivity.startActivity(mContext, data._id, data.monthRank, data.totalRank, data.title);
+                SubRankActivity.startActivity(mContext, data._id, data.monthRank, data.totalRank, data.title);
             }
         }
     }

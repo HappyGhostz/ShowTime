@@ -348,15 +348,6 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
         mFlReadWidget.addView(mPageWidget);
     }
 
-    private void gone(final View... views) {
-        if (views != null && views.length > 0) {
-            for (View view : views) {
-                if (view != null) {
-                    view.setVisibility(View.GONE);
-                }
-            }
-        }
-    }
 
     @Override
     protected void initView() {
@@ -627,7 +618,7 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
      * @param bean
      */
     private void showJoinBookShelfDialog(final Recommend.RecommendBooks bean) {
-        new AlertDialog.Builder(mContext)
+        new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.book_read_add_book))
                 .setMessage(getString(R.string.book_read_would_you_like_to_add_this_to_the_book_shelf))
                 .setPositiveButton(getString(R.string.book_read_join_the_book_shelf), new DialogInterface.OnClickListener() {
@@ -812,17 +803,6 @@ public class ReadActivity extends BaseActivity<IBookReadPresenter> implements IR
         View statusBarView = StatusBarCompat.compat(this, ContextCompat.getColor(this, R.color.chapter_title_night));
 //        statusBarView.setBackgroundColor(Color.RED);
     }
-
-    private void visible(final View... views) {
-        if (views != null && views.length > 0) {
-            for (View view : views) {
-                if (view != null) {
-                    view.setVisibility(View.VISIBLE);
-                }
-            }
-        }
-    }
-
     private class SeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
 
         @Override

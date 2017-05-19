@@ -149,6 +149,7 @@ public class CollectionsManager {
                     CacheManager.getInstance().removeTocList(App.getAppContext(), book._id);
                     // 移除阅读进度
                     SettingManager.getInstance().removeReadProgress(book._id);
+//                    remove(book._id);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

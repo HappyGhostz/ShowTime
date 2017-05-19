@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.rumens.showtime.App;
 import com.example.rumens.showtime.R;
-import com.example.rumens.showtime.constant.ConstantUitles;
 import com.example.rumens.showtime.inject.component.ActivityComponent;
 import com.example.rumens.showtime.inject.component.AppComponent;
 import com.example.rumens.showtime.inject.component.DaggerActivityComponent;
@@ -24,8 +23,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.example.rumens.showtime.App.getAppComponent;
 
 
 /**
@@ -51,6 +48,25 @@ public abstract class BaseActivity<T extends IBasePresenter> extends RxAppCompat
         initInjector();
         initView();
         updateViews();
+    }
+    protected void gone(final View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                if (view != null) {
+                    view.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+    protected void visible(final View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                if (view != null) {
+                    view.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
     }
 
     protected abstract void updateViews();
@@ -85,6 +101,8 @@ public abstract class BaseActivity<T extends IBasePresenter> extends RxAppCompat
     }
     protected void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, String title) {
         toolbar.setTitle(title);
+//        params = toolbar.getLayoutParams();
+//        params.setMargins(.())toolbar.setLayoutParams(params)setSupportActionBar(toolbar)
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(homeAsUpEnabled);
     }

@@ -8,9 +8,9 @@
 
     <!-- 遮挡状态栏透明的部分 -->
     <TextView
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/toolbar_margin_top"
-    android:background="?attr/colorPrimaryDark"/>
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_margin_top"
+        android:background="?attr/colorPrimaryDark"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

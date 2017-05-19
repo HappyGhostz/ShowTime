@@ -127,6 +127,12 @@
         </activity>
         <activity android:name=".reader.bookclassify.SubCategoryListActivity"/>
         <service android:name=".reader.downloadservice.DownloadBookService" />
+        <activity android:name=".reader.bookdetail.BookDetailActivity"/>
+        <activity android:name=".reader.bookhelp.BookHelpDetailActivity"/>
+        <activity android:name=".reader.bookrank.SubRankActivity"/>
+        <activity android:name=".reader.booksearch.SearchResultActivity"/>
+        <activity android:name=".reader.booksearch.ScanLocalBookActivity"/>
+        <activity android:name=".reader.bookrank.SubOtherHomeRankActivity"/>
     </application>
 
 </manifest>

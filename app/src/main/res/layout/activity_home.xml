@@ -7,81 +7,81 @@
     android:id="@+id/dl_root"
     tools:context="com.example.rumens.showtime.home.HomeActivity"
     tools:openDrawer="start">
-    <!--&lt;!&ndash; 遮挡状态栏透明的部分 &ndash;&gt;-->
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:background="?attr/colorPrimary"/>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"
         android:orientation="vertical">
-            <FrameLayout
-                android:id="@+id/fl_rightcontent"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                />
+        <!--&lt;!&ndash; 遮挡状态栏透明的部分 &ndash;&gt;-->
+        <TextView
+            android:id="@+id/status_hight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"/>
+        <FrameLayout
+            android:id="@+id/fl_rightcontent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
 
-    <RadioGroup
-        android:id="@+id/rg_Tab"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:background="#eeee"
-        >
-        <RadioButton
-            android:id="@+id/rb_new"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:text="新闻"
-            android:button="@null"
-            android:gravity="center"
-            android:background="@color/transparent"
-            android:textSize="16sp"
-            android:drawableTop="@drawable/sel_new_hometab"
-            android:textColor="@drawable/sel_text_hometab"/>
-        <RadioButton
-            android:id="@+id/rb_video"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:text="视频"
-            android:button="@null"
-            android:gravity="center"
-            android:background="@color/transparent"
-            android:textSize="16sp"
-            android:drawableTop="@drawable/sel_videro_hometab"
-            android:textColor="@drawable/sel_text_hometab"/>
-        <RadioButton
-            android:id="@+id/rb_music"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:text="音乐"
-            android:button="@null"
-            android:gravity="center"
-            android:background="@color/transparent"
-            android:textSize="16sp"
-            android:drawableTop="@drawable/sel_music_hometab"
-            android:textColor="@drawable/sel_text_hometab"/>
-        <RadioButton
-            android:id="@+id/rb_book"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:text="阅读"
-            android:button="@null"
-            android:gravity="center"
-            android:background="@color/transparent"
-            android:textSize="16sp"
-            android:drawableTop="@drawable/sel_reader_hometab"
-            android:textColor="@drawable/sel_text_hometab"/>
-    </RadioGroup>
+        <RadioGroup
+            android:id="@+id/rg_Tab"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:background="#eeee"
+            >
+            <RadioButton
+                android:id="@+id/rb_new"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="新闻"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@color/transparent"
+                android:textSize="16sp"
+                android:drawableTop="@drawable/sel_new_hometab"
+                android:textColor="@drawable/sel_text_hometab"/>
+            <RadioButton
+                android:id="@+id/rb_video"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="视频"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@color/transparent"
+                android:textSize="16sp"
+                android:drawableTop="@drawable/sel_videro_hometab"
+                android:textColor="@drawable/sel_text_hometab"/>
+            <RadioButton
+                android:id="@+id/rb_music"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="音乐"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@color/transparent"
+                android:textSize="16sp"
+                android:drawableTop="@drawable/sel_music_hometab"
+                android:textColor="@drawable/sel_text_hometab"/>
+            <RadioButton
+                android:id="@+id/rb_book"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="阅读"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@color/transparent"
+                android:textSize="16sp"
+                android:drawableTop="@drawable/sel_reader_hometab"
+                android:textColor="@drawable/sel_text_hometab"/>
+        </RadioGroup>
     </LinearLayout>
 
 

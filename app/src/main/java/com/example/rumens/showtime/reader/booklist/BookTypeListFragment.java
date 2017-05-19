@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
@@ -16,7 +17,12 @@ import com.example.rumens.showtime.base.IBasePresenter;
 import com.example.rumens.showtime.base.IBookListBaseView;
 import com.example.rumens.showtime.inject.component.DaggerBookTypeListComponent;
 import com.example.rumens.showtime.inject.modules.BookTypeListModule;
+import com.example.rumens.showtime.rxBus.event.RefreshCollectionListEvent;
 import com.example.rumens.showtime.utils.CollectionsManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -38,6 +44,7 @@ public class BookTypeListFragment extends BaseFragment<IBasePresenter> implement
     BaseQuickAdapter mRecommendAdapter;
 
     private String mBookListType;
+    private List<Recommend.RecommendBooks> collectionList;
 
     @Override
     protected int attachLayoutRes() {
@@ -79,11 +86,21 @@ public class BookTypeListFragment extends BaseFragment<IBasePresenter> implement
 
     @Override
     public void loadRecommendList(List<Recommend.RecommendBooks> list) {
-        mRecommendAdapter.updateItems(list);
+        collectionList = CollectionsManager.getInstance().getCollectionList();
+        if(collectionList.isEmpty()){
+            mRecommendAdapter.updateItems(list);
+        }else {
+            mRecommendAdapter.updateItems(collectionList);
+        }
+
         //推荐列表默认加入收藏
         for (Recommend.RecommendBooks bean : list) {
             //TODO 此处可优化：批量加入收藏->加入前需先判断是否收藏过
-            CollectionsManager.getInstance().add(bean);
+            if(collectionList.contains(bean)){
+                break;
+            }else {
+                CollectionsManager.getInstance().add(bean);
+            }
         }
     }
 
@@ -107,5 +124,19 @@ public class BookTypeListFragment extends BaseFragment<IBasePresenter> implement
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mBookListType = getArguments().getString(BOOK_LIST_TYPE);
         super.onCreate(savedInstanceState);
+        if(TextUtils.equals("书架",mBookListType)){
+            EventBus.getDefault().register(this);
+        }
+
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void RefreshCollectionList(RefreshCollectionListEvent event) {
+        loadRecommendList(collectionList);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

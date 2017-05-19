@@ -16,13 +16,20 @@
 package com.example.rumens.showtime.api;
 
 
+import com.example.rumens.showtime.api.bean.BookDetail;
 import com.example.rumens.showtime.api.bean.BookHelp;
 import com.example.rumens.showtime.api.bean.BookHelpList;
 import com.example.rumens.showtime.api.bean.BookMixATocBean;
+import com.example.rumens.showtime.api.bean.BooksByCats;
 import com.example.rumens.showtime.api.bean.CategoryList;
 import com.example.rumens.showtime.api.bean.ChapterReadBean;
+import com.example.rumens.showtime.api.bean.CommentList;
+import com.example.rumens.showtime.api.bean.HotReview;
 import com.example.rumens.showtime.api.bean.RankingListBean;
+import com.example.rumens.showtime.api.bean.Rankings;
 import com.example.rumens.showtime.api.bean.Recommend;
+import com.example.rumens.showtime.api.bean.RecommendBookList;
+import com.example.rumens.showtime.api.bean.SearchDetail;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -84,6 +91,69 @@ public interface IBookApi {
 
     @GET("http://chapter2.zhuishushenqi.com/chapter/{url}")
     Observable<ChapterReadBean> getChapterRead(@Path("url") String url);
+
+    /**
+     * 按分类获取书籍列表
+     *
+     * @param gender male、female
+     * @param type   hot(热门)、new(新书)、reputation(好评)、over(完结)
+     * @param major  玄幻
+     * @param minor  东方玄幻、异界大陆、异界争霸、远古神话
+     * @param limit  50
+     * @return
+     */
+    @GET("/book/by-categories")
+    Observable<BooksByCats> getBooksByCats(@Query("gender") String gender, @Query("type") String type, @Query("major") String major, @Query("minor") String minor, @Query("start") int start, @Query("limit") int limit);
+
+    @GET("/book/{bookId}")
+    Observable<BookDetail> getBookDetail(@Path("bookId") String bookId);
+    @GET("/post/review/best-by-book")
+    Observable<HotReview> getHotReview(@Query("book") String book);
+    @GET("/book-list/{bookId}/recommend")
+    Observable<RecommendBookList> getRecommendBookList(@Path("bookId") String bookId, @Query("limit") String limit);
+
+
+     /**
+      * 获取神评论列表(综合讨论区、书评区、书荒区皆为同一接口)
+     *
+      * @param disscussionId->_id
+     * @return
+      */
+    @GET("/post/{disscussionId}/comment/best")
+    Observable<CommentList> getBestComments(@Path("disscussionId") String disscussionId);
+
+     /**
+      * 获取书评区、书荒区帖子详情内的评论列表
+      *
+      * * @param bookReviewId->_id
+      * @param start             0
+      * @param limit             30
+      * @return
+      */
+    @GET("/post/review/{bookReviewId}/comment")
+    Observable<CommentList> getBookReviewComments(@Path("bookReviewId") String bookReviewId, @Query("start") String start, @Query("limit") String limit);
+
+
+     /**
+      * 获取单一排行榜
+      * 周榜：rankingId->_id
+      * 月榜：rankingId->monthRank
+      * 总榜：rankingId->totalRank
+      *
+      * @return
+      */
+    @GET("/ranking/{rankingId}")
+    Observable<Rankings> getRanking(@Path("rankingId") String rankingId);
+
+    /**
+     *书籍查询
+     *
+     * @param query
+     * @return
+     */
+    @GET("/book/fuzzy-search")
+    Observable<SearchDetail> searchBooks(@Query("query") String query);
+
     /*
 
     *//**
@@ -135,14 +205,6 @@ public interface IBookApi {
     @GET("/book/auto-complete")
     Observable<AutoComplete> autoComplete(@Query("query") String query);
 
-    *//**
-     * 书籍查询
-     *
-     * @param query
-     * @return
-     *//*
-    @GET("/book/fuzzy-search")
-    Observable<SearchDetail> searchBooks(@Query("query") String query);
 
     *//**
      * 通过作者查询书名
@@ -159,14 +221,9 @@ public interface IBookApi {
      * @param book
      * @return
      *//*
-    @GET("/post/review/best-by-book")
-    Observable<HotReview> getHotReview(@Query("book") String book);
 
-    @GET("/book-list/{bookId}/recommend")
-    Observable<RecommendBookList> getRecommendBookList(@Path("bookId") String bookId, @Query("limit") String limit);
 
-    @GET("/book/{bookId}")
-    Observable<BookDetail> getBookDetail(@Path("bookId") String bookId);
+
 
     @GET("/book/by-tags")
     Observable<BooksByTag> getBooksByTag(@Query("tags") String tags, @Query("start") String start, @Query("limit") String limit);
@@ -223,20 +280,6 @@ public interface IBookApi {
     Observable<CategoryListLv2> getCategoryListLv2();
 
     *//**
-     * 按分类获取书籍列表
-     *
-     * @param gender male、female
-     * @param type   hot(热门)、new(新书)、reputation(好评)、over(完结)
-     * @param major  玄幻
-     * @param minor  东方玄幻、异界大陆、异界争霸、远古神话
-     * @param limit  50
-     * @return
-     *//*
-    @GET("/book/by-categories")
-    Observable<BooksByCats> getBooksByCats(@Query("gender") String gender, @Query("type") String type, @Query("major") String major, @Query("minor") String minor, @Query("start") int start, @Query("limit") int limit);
-
-
-    *//**
      * 获取综合讨论区帖子列表
      * 全部、默认排序  http://api.zhuishushenqi.com/post/by-block?block=ramble&duration=all&sort=updated&type=all&start=0&limit=20&distillate=
      * 精品、默认排序  http://api.zhuishushenqi.com/post/by-block?block=ramble&duration=all&sort=updated&type=all&start=0&limit=20&distillate=true
@@ -265,14 +308,7 @@ public interface IBookApi {
     @GET("/post/{disscussionId}")
     Observable<Disscussion> getBookDisscussionDetail(@Path("disscussionId") String disscussionId);
 
-    *//**
-     * 获取神评论列表(综合讨论区、书评区、书荒区皆为同一接口)
-     *
-     * @param disscussionId->_id
-     * @return
-     *//*
-    @GET("/post/{disscussionId}/comment/best")
-    Observable<CommentList> getBestComments(@Path("disscussionId") String disscussionId);
+
 
     *//**
      * 获取综合讨论区帖子详情内的评论列表
@@ -313,16 +349,7 @@ public interface IBookApi {
     @GET("/post/review/{bookReviewId}")
     Observable<BookReview> getBookReviewDetail(@Path("bookReviewId") String bookReviewId);
 
-    *//**
-     * 获取书评区、书荒区帖子详情内的评论列表
-     *
-     * @param bookReviewId->_id
-     * @param start             0
-     * @param limit             30
-     * @return
-     *//*
-    @GET("/post/review/{bookReviewId}/comment")
-    Observable<CommentList> getBookReviewComments(@Path("bookReviewId") String bookReviewId, @Query("start") String start, @Query("limit") String limit);
+
 
     *//**
      * 获取书荒区帖子列表
@@ -341,14 +368,7 @@ public interface IBookApi {
     @GET("/post/help")
     Observable<BookHelpList> getBookHelpList(@Query("duration") String duration, @Query("sort") String sort, @Query("start") String start, @Query("limit") String limit, @Query("distillate") String distillate);
 
-    *//**
-     * 获取书荒区帖子详情
-     *
-     * @param helpId->_id
-     * @return
-     *//*
-    @GET("/post/help/{helpId}")
-    Observable<BookHelp> getBookHelpDetail(@Path("helpId") String helpId);
+
 
     *//**
      * 第三方登陆

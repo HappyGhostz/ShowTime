@@ -111,7 +111,7 @@ public class DownloadBookService extends Service{
     public synchronized void downloadBook(final DownloadQueue downloadQueue) {
         AsyncTask<Integer, Integer, Integer> downloadTask = new AsyncTask<Integer, Integer, Integer>() {
 
-            List<BookMixATocBean.mixToc.Chapters> list = downloadQueue.list;
+             List<BookMixATocBean.mixToc.Chapters> list = downloadQueue.list;
             String bookId = downloadQueue.bookId;
             int start = downloadQueue.start; // 起始章节
             int end = downloadQueue.end; // 结束章节

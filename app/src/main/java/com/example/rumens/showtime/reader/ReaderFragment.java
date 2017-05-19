@@ -1,11 +1,17 @@
 package com.example.rumens.showtime.reader;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -15,12 +21,18 @@ import com.example.rumens.showtime.base.BaseFragment;
 import com.example.rumens.showtime.reader.bookclassify.BookClassifyListFragment;
 import com.example.rumens.showtime.reader.booklist.BookTypeListFragment;
 import com.example.rumens.showtime.reader.bookrank.BookRankListFragment;
+import com.example.rumens.showtime.reader.booksearch.ScanLocalBookActivity;
+import com.example.rumens.showtime.reader.booksearch.SearchResultActivity;
 import com.example.rumens.showtime.reader.downloadservice.DownloadBookService;
+import com.example.rumens.showtime.utils.Constant;
+import com.example.rumens.showtime.utils.SharedPreferencesUtil;
+import com.example.rumens.showtime.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author Zhaochen Ping
@@ -40,6 +52,8 @@ public class ReaderFragment extends BaseFragment {
     TabLayout mTabNewLayout;
     @BindView(R.id.viewpager)
     ViewPager mViewpager;
+
+
     private List<String> titles;
     private List<Fragment> fragments;
     private ViewPagerAdapter pagerAdapter;
@@ -82,7 +96,7 @@ public class ReaderFragment extends BaseFragment {
     @Override
     protected void updateViews() {
         initData();
-        pagerAdapter.setItems(fragments,titles);
+        pagerAdapter.setItems(fragments, titles);
         mViewpager.setAdapter(pagerAdapter);
         mTabNewLayout.setupWithViewPager(mViewpager);
     }
@@ -92,5 +106,47 @@ public class ReaderFragment extends BaseFragment {
         super.onDestroy();
         DownloadBookService.cancel();
         getActivity().stopService(new Intent(getActivity(), DownloadBookService.class));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.item_channel:
+                new AlertDialog.Builder(mContext)
+                        .setTitle("阅读页翻页效果")
+                        .setSingleChoiceItems(getResources().getStringArray(R.array.setting_dialog_style_choice),
+                                SharedPreferencesUtil.getInstance().getInt(Constant.FLIP_STYLE, 0),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SharedPreferencesUtil.getInstance().putInt(Constant.FLIP_STYLE, which);
+                                        dialog.dismiss();
+                                    }
+                                })
+                        .create().show();
+                break;
+            case R.id.action_scan_local_book:
+                ScanLocalBookActivity.startActivity(mContext);
+                break;
+        }
+        return false;
+    }
+
+    @OnClick(R.id.bt_search)
+    public void onViewClicked() {
+        String bookName = mEtInput.getText().toString();
+        if(TextUtils.isEmpty(bookName)){
+            ToastUtils.showToast("请输入书名");
+            return;
+        }else {
+            SearchResultActivity.lunch(mContext,bookName);
+        }
+
     }
 }

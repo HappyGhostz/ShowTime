@@ -29,7 +29,7 @@
 
     <color name="color_background_white">#ffffff</color>
     <color name="color_statusbar">#212121</color>
-
+    <color name="gray">#b8b8b8</color>
     <!--各种颜色-->
     <color name="transparent">#00000000</color>
     <color name="color_white">#ffffff</color>

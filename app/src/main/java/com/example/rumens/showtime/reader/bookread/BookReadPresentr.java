@@ -28,6 +28,8 @@ public class BookReadPresentr implements IBookReadPresenter {
     public BookReadPresentr(IReadBaseView mView) {
         this.mView = mView;
     }
+    public BookReadPresentr() {
+    }
 
     @Override
     public void getData() {
