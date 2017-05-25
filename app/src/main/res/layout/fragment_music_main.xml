@@ -8,49 +8,66 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_margin_top"
         android:background="?attr/colorPrimaryDark"/>
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tool_bar"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimaryDark"
-        app:navigationIcon="@mipmap/ic_nav"
-        app:layout_scrollFlags="scroll|enterAlways|snap"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:hint="搜索内容"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/image_search_pressed"
-                android:layout_margin="5dp"/>
-        </LinearLayout>
-    </android.support.v7.widget.Toolbar>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/tab_height"
-        android:background="@color/color_primary"
-        android:elevation="@dimen/cardview_default_elevation"
-        android:orientation="horizontal">
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_new_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_height"
-            app:tabIndicatorColor="@android:color/white"
-            app:tabMode="scrollable"
-            android:layout_weight="1"/>
-    </LinearLayout>
+        android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/color_layout_background"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tool_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimaryDark"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:navigationIcon="@mipmap/ic_nav"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tab_height"
+                android:background="@color/color_primary"
+                android:elevation="@dimen/cardview_default_elevation"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tab_music_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/tab_height"
+                    android:layout_weight="1"
+                    app:tabIndicatorColor="@android:color/white"
+                    app:tabMode="fixed" />
+
+                <ImageView
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:alpha="0.5"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/background_shadow_dark" />
+
+
+                <TextView
+                    android:id="@+id/tv_music_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tab_height"
+                    android:layout_weight="0"
+                    android:background="?selectableItemBackground"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="@string/video_seach"
+                    android:textColor="@color/color_icons" />
+            </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_layout_background"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

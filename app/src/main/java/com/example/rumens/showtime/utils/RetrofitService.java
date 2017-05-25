@@ -9,6 +9,7 @@ import com.example.rumens.showtime.api.IBookApi;
 import com.example.rumens.showtime.api.IDouyuApi;
 import com.example.rumens.showtime.api.IDouyuVideoApi;
 import com.example.rumens.showtime.api.ILivesApi;
+import com.example.rumens.showtime.api.IMusicsApi;
 import com.example.rumens.showtime.api.INewsApi;
 import com.example.rumens.showtime.api.IWelfareApi;
 import com.example.rumens.showtime.api.bean.BookDetail;
@@ -29,12 +30,14 @@ import com.example.rumens.showtime.api.bean.OldLiveVideoInfo;
 import com.example.rumens.showtime.api.bean.PhotoInfo;
 import com.example.rumens.showtime.api.bean.PhotoSetInfo;
 import com.example.rumens.showtime.api.bean.RankingListBean;
+import com.example.rumens.showtime.api.bean.RankingListItem;
 import com.example.rumens.showtime.api.bean.Rankings;
 import com.example.rumens.showtime.api.bean.Recommend;
 import com.example.rumens.showtime.api.bean.RecommendBookList;
 import com.example.rumens.showtime.api.bean.SpecialInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoList;
+import com.example.rumens.showtime.api.bean.WrapperSongListInfo;
 import com.example.rumens.showtime.local.BeautyPhoto;
 import com.example.rumens.showtime.local.VideoInfo;
 
@@ -90,6 +93,7 @@ public class RetrofitService {
     private static final String BASE_DOUYU_URL = "http://capi.douyucdn.cn/api/v1/";
     private static final String BASE_LIVE_DOUYU_VIDEO_URL ="http://coapi.douyucdn.cn/" ;
     private static final String BASE_BOOKE_URL ="http://api.zhuishushenqi.com" ;
+    private static final String BASE_MUSIC_URL ="http://tingapi.ting.baidu.com/v1/restserver/" ;
 
     private static INewsApi sNewsService;
     private static IWelfareApi sWelfareService;
@@ -97,6 +101,7 @@ public class RetrofitService {
     private static IDouyuApi sDouyuLivesService;
     private static IDouyuVideoApi sDouyuLiveVideoService;
     private static IBookApi sBookService;
+    private static IMusicsApi sMusicService;
     // 递增页码
     private static final int INCREASE_PAGE = 20;
     private static Context mContext;
@@ -180,6 +185,14 @@ public class RetrofitService {
                 .baseUrl(BASE_BOOKE_URL)
                 .build();
         sBookService = retrofit.create(IBookApi.class);
+
+        retrofit = new Retrofit.Builder()
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl(BASE_MUSIC_URL)
+                .build();
+        sMusicService= retrofit.create(IMusicsApi.class);
 
 
     }
@@ -507,6 +520,30 @@ public class RetrofitService {
 
     public static Observable getSearchResult(String mBookName) {
         return sBookService.searchBooks(mBookName);
+    }
+
+    /**
+     * 获得歌单全部列表
+     * @param musicUrlFormat
+     * @param musicUrlFrom
+     * @param musicUrlMethodGedan
+     * @param pageSize
+     * @param startPage
+     */
+    public static Observable<WrapperSongListInfo> getMusicListAll(String musicUrlFormat, String musicUrlFrom, String musicUrlMethodGedan, int pageSize, int startPage) {
+        return sMusicService.getSongListAll(musicUrlFormat,musicUrlFrom,musicUrlMethodGedan,pageSize,startPage)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Observable<RankingListItem> getRankMusicListAll(String musicUrlFormat, String musicUrlFrom, String musicUrlMethodRankinglist, int musicUrlRankinglistFlag) {
+        return sMusicService.getRankingListAll(musicUrlFormat,musicUrlFrom,musicUrlMethodRankinglist,musicUrlRankinglistFlag)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
