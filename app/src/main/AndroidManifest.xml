@@ -133,6 +133,9 @@
         <activity android:name=".reader.booksearch.SearchResultActivity"/>
         <activity android:name=".reader.booksearch.ScanLocalBookActivity"/>
         <activity android:name=".reader.bookrank.SubOtherHomeRankActivity"/>
+        <!--音乐模块-->
+        <activity android:name=".music.listplay.MusicRankingListDetailActivity"/>
+        <activity android:name=".music.listplay.MusicListDetialActivity"/>
     </application>
 
 </manifest>

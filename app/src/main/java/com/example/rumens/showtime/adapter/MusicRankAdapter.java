@@ -1,12 +1,14 @@
 package com.example.rumens.showtime.adapter;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseViewHolder;
 import com.example.rumens.showtime.api.bean.RankingListItem;
+import com.example.rumens.showtime.music.listplay.MusicRankingListDetailActivity;
 import com.example.rumens.showtime.utils.DefIconFactory;
 import com.example.rumens.showtime.utils.ImageLoader;
 
@@ -29,7 +31,7 @@ public class MusicRankAdapter extends BaseQuickAdapter<RankingListItem.RangkingD
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, RankingListItem.RangkingDetail item) {
+    protected void convert(final BaseViewHolder holder, final RankingListItem.RangkingDetail item) {
         ImageView imageView = holder.getView(R.id.iv_ranking_photo);
         ImageLoader.loadCenterCrop(mContext,item.getPic_s192(),imageView, DefIconFactory.provideIcon());
 
@@ -48,5 +50,13 @@ public class MusicRankAdapter extends BaseQuickAdapter<RankingListItem.RangkingD
                 .setText(R.id.tv_rank_name,item.getName())
                 .setText(R.id.tv_rank_second,"2." + title2 + "-" + author2)
                 .setText(R.id.tv_rank_third,"3." + title3 + "-" + author3);
+
+        holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                MusicRankingListDetailActivity.lunch(mContext,position,item.getName());
+            }
+        });
     }
 }

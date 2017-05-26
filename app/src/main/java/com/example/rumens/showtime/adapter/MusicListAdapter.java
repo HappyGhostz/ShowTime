@@ -1,12 +1,14 @@
 package com.example.rumens.showtime.adapter;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseViewHolder;
 import com.example.rumens.showtime.api.bean.WrapperSongListInfo;
+import com.example.rumens.showtime.music.listplay.MusicListDetialActivity;
 import com.example.rumens.showtime.utils.DefIconFactory;
 import com.example.rumens.showtime.utils.ImageLoader;
 
@@ -27,7 +29,7 @@ public class MusicListAdapter extends BaseQuickAdapter<WrapperSongListInfo.SongL
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, WrapperSongListInfo.SongListInfo item) {
+    protected void convert(BaseViewHolder holder, final WrapperSongListInfo.SongListInfo item) {
         int count = Integer.parseInt(item.getListenum());
         if(count>10000){
             count = count / 10000;
@@ -38,6 +40,13 @@ public class MusicListAdapter extends BaseQuickAdapter<WrapperSongListInfo.SongL
         holder.setText(R.id.tv_songlist_name,item.getTitle());
         ImageView imageView=holder.getView(R.id.iv_songlist_photo);
         ImageLoader.loadCenterCrop(mContext,item.getPic_300(),imageView, DefIconFactory.provideIcon());
+
+        holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicListDetialActivity.lunch(mContext,item);
+            }
+        });
     }
 
 

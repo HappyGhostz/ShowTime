@@ -30,10 +30,12 @@ import com.example.rumens.showtime.api.bean.OldLiveVideoInfo;
 import com.example.rumens.showtime.api.bean.PhotoInfo;
 import com.example.rumens.showtime.api.bean.PhotoSetInfo;
 import com.example.rumens.showtime.api.bean.RankingListBean;
+import com.example.rumens.showtime.api.bean.RankingListDetail;
 import com.example.rumens.showtime.api.bean.RankingListItem;
 import com.example.rumens.showtime.api.bean.Rankings;
 import com.example.rumens.showtime.api.bean.Recommend;
 import com.example.rumens.showtime.api.bean.RecommendBookList;
+import com.example.rumens.showtime.api.bean.SongListDetail;
 import com.example.rumens.showtime.api.bean.SpecialInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoList;
@@ -540,6 +542,22 @@ public class RetrofitService {
 
     public static Observable<RankingListItem> getRankMusicListAll(String musicUrlFormat, String musicUrlFrom, String musicUrlMethodRankinglist, int musicUrlRankinglistFlag) {
         return sMusicService.getRankingListAll(musicUrlFormat,musicUrlFrom,musicUrlMethodRankinglist,musicUrlRankinglistFlag)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Observable<RankingListDetail> getRankPlayList(String musicUrlFormat, String musicUrlFrom, String musicUrlMethodRankingDetail, int mType, int offset, int size, String mFields) {
+        return sMusicService.getRankingListDetail(musicUrlFormat,musicUrlFrom,musicUrlMethodRankingDetail,mType,offset,size,mFields)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Observable<SongListDetail> getMusicListDetialAll(String musicUrlFormat, String musicUrlFrom, String musicUrlMethodSonglistDetail, String songListid) {
+        return sMusicService.getSongListDetail(musicUrlFormat,musicUrlFrom,musicUrlMethodSonglistDetail,songListid)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())

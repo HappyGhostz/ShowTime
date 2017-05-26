@@ -23,6 +23,8 @@ public interface IMusicsApi {
     public static final String MUSIC_URL_METHOD_GEDAN ="baidu.ting.diy.gedan";
     public static final String MUSIC_URL_METHOD_RANKINGLIST ="baidu.ting.billboard.billCategory";
     public static final  int MUSIC_URL_RANKINGLIST_FLAG = 1;
+    public static final String MUSIC_URL_METHOD_SONGLIST_DETAIL ="baidu.ting.diy.gedanInfo";
+    public static final String MUSIC_URL_METHOD_RANKING_DETAIL ="baidu.ting.billboard.billList";
     public static final int  pageSize = 40;
     public static final int startPage=0;
 
