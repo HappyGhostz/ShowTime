@@ -48,6 +48,7 @@ public class VideoLocalListItemBean implements Serializable {
             String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
             String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
             int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
             item = new VideoLocalListItemBean(title,path,0,duration,artist);
         }
         return item;
