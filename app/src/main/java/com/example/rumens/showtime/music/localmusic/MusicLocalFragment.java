@@ -2,6 +2,10 @@ package com.example.rumens.showtime.music.localmusic;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.SlideOnScaleAndeAlphaAdapter;
@@ -29,6 +33,9 @@ public class MusicLocalFragment extends BaseFragment implements IBaseLocalMusicV
     RecyclerView mRvListMusic;
     @Inject
     BaseQuickAdapter mAdapter;
+    private RelativeLayout mRlPlayAll;
+    private ImageView mIvSetting;
+    private TextView mTvPlayNumber;
 
     @Override
     protected int attachLayoutRes() {
@@ -46,8 +53,18 @@ public class MusicLocalFragment extends BaseFragment implements IBaseLocalMusicV
 
     @Override
     protected void initViews() {
+        View view = View.inflate(getContext(),R.layout.item_music_rank_list_play_head, null);
+//        View view = from.inflate(R.layout.item_book_help_detial_head, null);
+        initHeadView(view);
+        mAdapter.addHeaderView(view);
         SlideOnScaleAndeAlphaAdapter slideAdapter = new SlideOnScaleAndeAlphaAdapter(mAdapter);
         RecyclerViewHelper.initRecyclerViewV(mContext,mRvListMusic,true,slideAdapter);
+    }
+
+    private void initHeadView(View view) {
+        mRlPlayAll = (RelativeLayout) view.findViewById(R.id.rl_play_all_layout);
+        mIvSetting = (ImageView) view.findViewById(R.id.iv_detail_select);
+        mTvPlayNumber = (TextView) view.findViewById(R.id.tv_play_all_number);
     }
 
     @Override
@@ -63,5 +80,10 @@ public class MusicLocalFragment extends BaseFragment implements IBaseLocalMusicV
     @Override
     public void loadLocalMusicListInfo(List<SongLocalBean> localBeanList) {
         mAdapter.updateItems(localBeanList);
+        initHeadData(localBeanList);
+    }
+
+    private void initHeadData(List<SongLocalBean> localBeanList) {
+        mTvPlayNumber.setText("(共"+localBeanList.size()+"首)");
     }
 }

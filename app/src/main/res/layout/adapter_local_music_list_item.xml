@@ -10,42 +10,46 @@
     <ImageView
         android:layout_marginLeft="10dp"
         android:id="@+id/iv_albumr"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:gravity="center"
-        android:paddingLeft="15dp"
-        android:paddingRight="10dp"
         android:textSize="15sp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:scaleType="fitCenter"/>
+        android:src="@mipmap/music_detail_play"
+        />
 
     <LinearLayout
-        android:layout_toRightOf="@+id/iv_albumr"
-        android:layout_toLeftOf="@+id/popup_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:orientation="vertical"
         android:paddingLeft="18dp"
-        android:paddingTop="5dp">
+        android:paddingTop="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/iv_albumr">
 
         <TextView
-            android:text="听海"
             android:id="@+id/tv_song_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="39dp"
             android:ellipsize="end"
             android:singleLine="true"
+            android:text="听海"
             android:textColor="@color/listTextColor"
             android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
         <TextView
             android:text="张惠妹"
             android:id="@+id/tv_song_artist"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="39dp"
             android:textColor="@color/common_h2"
@@ -53,6 +57,21 @@
             android:paddingTop="3dp"
             android:singleLine="true"
             android:textSize="12sp" />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                android:background="#898989"
+                />
+            <TextView
+                android:id="@+id/tv_local_album"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/common_h2"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:text="专辑"/>
+        </LinearLayout>
 
     </LinearLayout>
 
