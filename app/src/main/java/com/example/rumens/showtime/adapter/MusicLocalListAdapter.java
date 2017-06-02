@@ -7,18 +7,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseViewHolder;
 import com.example.rumens.showtime.api.bean.SongLocalBean;
+import com.example.rumens.showtime.music.musicplay.MusicPlay;
 import com.example.rumens.showtime.utils.ImageLoader;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @author Zhaochen Ping
@@ -27,8 +30,15 @@ import java.io.InputStream;
  */
 
 public class MusicLocalListAdapter extends BaseQuickAdapter<SongLocalBean> {
+    private List<SongLocalBean> songs;
+
     public MusicLocalListAdapter(Context context) {
         super(context);
+    }
+
+    public MusicLocalListAdapter(Context context, List<SongLocalBean> songs) {
+        super(context);
+        this.songs = songs;
     }
 
     @Override
@@ -37,7 +47,7 @@ public class MusicLocalListAdapter extends BaseQuickAdapter<SongLocalBean> {
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, SongLocalBean item) {
+    protected void convert(final BaseViewHolder holder, final SongLocalBean item) {
         ImageView imageView = holder.getView(R.id.iv_albumr);
         Bitmap artwork = getArtwork(mContext, item._id, item.albun_id);
 //        if(artwork!=null){
@@ -52,6 +62,12 @@ public class MusicLocalListAdapter extends BaseQuickAdapter<SongLocalBean> {
         holder.setText(R.id.tv_song_title,item.title)
                 .setText(R.id.tv_song_artist,item.artist)
                 .setText(R.id.tv_local_album,item.album);
+        holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicPlay.lunch(mContext,item,holder.getPosition(),songs);
+            }
+        });
     }
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
     private static final BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options();

@@ -136,6 +136,8 @@
         <!--音乐模块-->
         <activity android:name=".music.listplay.MusicRankingListDetailActivity"/>
         <activity android:name=".music.listplay.MusicListDetialActivity"/>
+        <activity android:name=".music.musicplay.MusicPlay"/>
+        <service android:name=".music.musicplay.service.MusicPlayServise"/>
     </application>
 
 </manifest>

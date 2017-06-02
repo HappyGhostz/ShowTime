@@ -97,4 +97,6 @@ dependencies {
     compile project(path: ':InitActivity')
     // Bus
     compile 'org.greenrobot:eventbus:3.0.0'
+    //布局百分比库
+    compile 'com.android.support:percent:25.2.0'
 }

@@ -16,6 +16,7 @@ import com.example.rumens.showtime.base.BaseFragment;
 import com.example.rumens.showtime.inject.component.DaggerMusicLocalListComponent;
 import com.example.rumens.showtime.inject.modules.MusicLocalListModule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,6 +37,7 @@ public class MusicLocalFragment extends BaseFragment implements IBaseLocalMusicV
     private RelativeLayout mRlPlayAll;
     private ImageView mIvSetting;
     private TextView mTvPlayNumber;
+    private List<SongLocalBean> songs = new ArrayList<>();
 
     @Override
     protected int attachLayoutRes() {
@@ -46,7 +48,7 @@ public class MusicLocalFragment extends BaseFragment implements IBaseLocalMusicV
     protected void initInjector() {
         DaggerMusicLocalListComponent.builder()
                 .appComponent(getAppComponent())
-                .musicLocalListModule(new MusicLocalListModule(this))
+                .musicLocalListModule(new MusicLocalListModule(this,songs))
                 .build()
                 .inject(this);
     }
@@ -79,6 +81,7 @@ public class MusicLocalFragment extends BaseFragment implements IBaseLocalMusicV
 
     @Override
     public void loadLocalMusicListInfo(List<SongLocalBean> localBeanList) {
+        songs.addAll(localBeanList);
         mAdapter.updateItems(localBeanList);
         initHeadData(localBeanList);
     }

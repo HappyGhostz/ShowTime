@@ -33,6 +33,7 @@ public class App extends Application{
     private RxBus mRxBus = new RxBus();
     public Context applicationContext;
     private static Context mContext;
+    private static RxBus rxBus;
 
     @Override
     public void onCreate() {
@@ -40,6 +41,7 @@ public class App extends Application{
         application = new App();
         mContext = getApplicationContext();
         sContext = getApplication();
+        rxBus = new RxBus();
         initDataDao();
         initInhect();
         initConfig();
@@ -110,6 +112,9 @@ public class App extends Application{
 
     public static AppComponent getAppComponent() {
         return sAppComponent;
+    }
+    public  static RxBus getRxBus(){
+        return rxBus;
     }
     public static Context getContext() {
         return sContext;

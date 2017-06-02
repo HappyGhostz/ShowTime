@@ -2,7 +2,6 @@ package com.example.rumens.showtime.rxBus;
 
 import java.util.HashMap;
 
-
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;

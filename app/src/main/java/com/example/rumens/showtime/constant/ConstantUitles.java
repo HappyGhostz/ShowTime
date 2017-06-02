@@ -17,6 +17,7 @@ public class ConstantUitles {
     public final static int STUTUS_LOADING = 1;
     public final static int STUTUS_HIDE = 2;
     public final static int STUTUS_NO_DATA = 3;
+    public final static String MUSIC_MODE="MUSICMODE";
     //下载常量
     // 未下载
     public static final int NORMAL = 0;
