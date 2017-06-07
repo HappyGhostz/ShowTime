@@ -72,6 +72,12 @@
         <attr name="differentSize" format="boolean" /><!--是否支持大小不等星星样式-->
     </declare-styleable>
 
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+
+    </declare-styleable>
+
 
 
 </resources>

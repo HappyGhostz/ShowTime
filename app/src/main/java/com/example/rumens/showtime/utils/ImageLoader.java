@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
@@ -48,6 +49,20 @@ public class ImageLoader {
         Glide.with(context)
                 .load(resID)
                 .dontAnimate()
+                .into(view);
+    }
+    public static void loadResGif(Context context ,int resId,ImageView view){
+        Glide.with(context)
+                .load(resId)
+                .asGif()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(view);
+    }
+    public static void loadUrlGif(Context context ,String url,ImageView view){
+        Glide.with(context)
+                .load(url)
+                .asGif()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(view);
     }
 

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.rumens.showtime.App;
 import com.example.rumens.showtime.R;
+import com.example.rumens.showtime.adapter.ViewPagerAdapter;
 import com.example.rumens.showtime.api.bean.SongLocalBean;
 import com.example.rumens.showtime.base.BaseActivity;
 import com.example.rumens.showtime.constant.ConstantUitles;
@@ -100,6 +102,7 @@ public class MusicPlay extends BaseActivity {
             }
         }
     };
+    private boolean isLocal1;
 
     @Override
     protected void updateViews() {
@@ -133,6 +136,33 @@ public class MusicPlay extends BaseActivity {
         this.bindService(intent, mMusicServiceConnect, BIND_AUTO_CREATE);
         initToolBar(mToolbar,true,songLocalBean.title);
         mIvPlayingPlay.setImageResource(R.mipmap.play_rdi_btn_pause);
+        initViewPager();
+    }
+    private String picUrl=null;
+    private void initViewPager() {
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(RoundFragment.lunch(this,isLocal,picUrl));
+        List<String> titles = new ArrayList<>();
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.setItems(fragments,titles);
+        mViewPager.setAdapter(viewPagerAdapter);
+        mViewPager.setCurrentItem(0);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -144,6 +174,7 @@ public class MusicPlay extends BaseActivity {
     protected void initInjector() {
         mLocalMusic = (SongLocalBean) getIntent().getExtras().getSerializable(LOCAL_MUSIC);
         mPosition = getIntent().getIntExtra(LOCAL_POSITION, 0);
+        isLocal1 = getIntent().getBooleanExtra(LOCAL_IS, false);
         initRxBus();
     }
 
@@ -155,7 +186,7 @@ public class MusicPlay extends BaseActivity {
         intent.putExtra(LOCAL_IS, true);
         intent.putParcelableArrayListExtra(LOCAL_SONG_LIST, (ArrayList<? extends Parcelable>) songs);
         mContext.startActivity(intent);
-        ((Activity) mContext).overridePendingTransition(R.anim.fade_entry, R.anim.zoom_in_exit);
+        ((Activity) mContext).overridePendingTransition(R.anim.fade_entry, R.anim.hold);
     }
 
     private void initRxBus() {

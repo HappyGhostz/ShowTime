@@ -36,7 +36,7 @@ public class MusicPlayServise extends Service implements MediaPlayer.OnPreparedL
     private long mCurrentPosition;
     private long mDuration;
     private SongLocalBean mSongLocalBean;
-    private int mCurrent;
+    private int mCurrent=-1;
     private boolean isLocal;
     private RxBus rxBus;
     private ArrayList<SongLocalBean> songs;

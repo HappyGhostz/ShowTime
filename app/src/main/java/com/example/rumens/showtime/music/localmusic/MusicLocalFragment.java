@@ -15,6 +15,7 @@ import com.example.rumens.showtime.api.bean.SongLocalBean;
 import com.example.rumens.showtime.base.BaseFragment;
 import com.example.rumens.showtime.inject.component.DaggerMusicLocalListComponent;
 import com.example.rumens.showtime.inject.modules.MusicLocalListModule;
+import com.example.rumens.showtime.music.musicplay.MusicPlay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,12 @@ public class MusicLocalFragment extends BaseFragment implements IBaseLocalMusicV
         mRlPlayAll = (RelativeLayout) view.findViewById(R.id.rl_play_all_layout);
         mIvSetting = (ImageView) view.findViewById(R.id.iv_detail_select);
         mTvPlayNumber = (TextView) view.findViewById(R.id.tv_play_all_number);
+        mRlPlayAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicPlay.lunch(mContext,(SongLocalBean) mAdapter.getItem(0),1,songs);
+            }
+        });
     }
 
     @Override
