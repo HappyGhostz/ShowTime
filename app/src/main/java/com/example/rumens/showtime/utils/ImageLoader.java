@@ -8,6 +8,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.rumens.showtime.R;
+import com.example.rumens.showtime.entity.GlideRoundTransformUtil;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
@@ -64,6 +66,24 @@ public class ImageLoader {
                 .asGif()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(view);
+    }
+    public static void displayRound(Context context, ImageView imageView, String url) {
+        if (imageView == null) {
+            throw new IllegalArgumentException("argument error");
+        }
+        Glide.with(context).load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(R.mipmap.ic_empty_picture).
+                centerCrop().transform(new GlideRoundTransformUtil(context)).into(imageView);
+    }
+    public static void displayRoundRes(Context context, ImageView imageView, int resId) {
+        if (imageView == null) {
+            throw new IllegalArgumentException("argument error");
+        }
+        Glide.with(context).load(resId)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(R.mipmap.ic_empty_picture).
+                centerCrop().transform(new GlideRoundTransformUtil(context)).into(imageView);
     }
 
     /**

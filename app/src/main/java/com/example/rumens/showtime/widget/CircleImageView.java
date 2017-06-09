@@ -31,7 +31,7 @@ public class CircleImageView extends ImageView {
      * 圆形头像默认，CENTER_CROP!=系统默认的CENTER_CROP；
      * 将图片等比例缩放，让图像的长边边与ImageView的边长度相同，短边不够的留空白，缩放后截取圆形部分进行显示。
      */
-    private static final ScaleType SCALE_TYPE=ScaleType.CENTER_CROP;
+    private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
     /**
      * 图片的压缩质量
      * ALPHA_8就是Alpha由8位组成，------ALPHA_8 代表8位Alpha位图
@@ -43,12 +43,11 @@ public class CircleImageView extends ImageView {
     /**
      * 默认ColorDrawable的宽和高
      */
-    private static final int COLOR_DRAWABLE_DEFAULT=1;
+    private static final int COLORDRAWABLE_DIMENSION = 1;
     /**
      * 默认边框宽度
      */
-    private  static final int DEFAULT_BORDER_WIDTH = 0;
-
+    private static final int DEFAULT_BORDER_WIDTH = 0;
     /**
      * 默认边框颜色
      */
@@ -56,11 +55,11 @@ public class CircleImageView extends ImageView {
     /**
      * 画图片的矩形
      */
-    private RectF mDrawaleRect = new RectF();
+    private final RectF mDrawableRect = new RectF();
     /**
      * 画边框的矩形
      */
-    private RectF mBorderRect = new RectF();
+    private final RectF mBorderRect = new RectF();
     /**
      * 对图片进行缩放和移动的矩阵
      */
@@ -68,7 +67,7 @@ public class CircleImageView extends ImageView {
     /**
      * 画图片的画笔
      */
-    private final Paint mDrawablePaint = new Paint();
+    private final Paint mBitmapPaint = new Paint();
     /**
      * 画边框的画笔
      */
@@ -111,184 +110,60 @@ public class CircleImageView extends ImageView {
      * 内边距
      */
     private boolean mSetupPending;
+
     public CircleImageView(Context context) {
-        this(context,null);
+        super(context);
     }
 
-    public CircleImageView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs,0);
+    public CircleImageView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public CircleImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         super.setScaleType(SCALE_TYPE);
         /**
          * 获取在xml中声明的属性
          */
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyleAttr, 0);
-        typedArray.getDimensionPixelSize(R.styleable.CircleImageView_civ_border_width,DEFAULT_BORDER_WIDTH);
-        typedArray.getColor(R.styleable.CircleImageView_civ_border_color,DEFAULT_BORDER_COLOR);
-        typedArray.recycle();
-        mReady=true;
-        if(mSetupPending){
-            setUp();
-            mSetupPending=false;
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0);//获取xml中的属性
+
+        mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_civ_border_width, DEFAULT_BORDER_WIDTH);
+        mBorderColor = a.getColor(R.styleable.CircleImageView_civ_border_color, DEFAULT_BORDER_COLOR);
+
+        a.recycle();
+
+        mReady = true;
+
+        if (mSetupPending) {
+            setup();
+            mSetupPending = false;
         }
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        setUp();
+    public ScaleType getScaleType() {
+        return SCALE_TYPE;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if(getDrawable()==null){
+        if (getDrawable() == null) {
             return;
         }
         /**
          * 画圆形图片
          */
-        canvas.drawCircle(getWidth()/2,getHeight()/2,mDrawableRadius,mDrawablePaint);/**
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, mDrawableRadius, mBitmapPaint);
+        /**
          * 画圆形边框
          */
-        canvas.drawCircle(getWidth()/2,getHeight()/2,mBorderRadius,mBorderPaint);
-
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);
     }
 
     @Override
-    public void setImageBitmap(Bitmap bm) {
-        super.setImageBitmap(bm);
-        mBitmap=bm;
-        setUp();
-    }
-
-    @Override
-    public void setImageDrawable(@Nullable Drawable drawable) {
-        super.setImageDrawable(drawable);
-        mBitmap=getBitmapFromDrawable(drawable);
-        setUp();
-    }
-
-    @Override
-    public void setImageResource(@DrawableRes int resId) {
-        super.setImageResource(resId);
-        mBitmap=getBitmapFromDrawable(getDrawable());
-        setUp();
-    }
-    /**
-     * 获取资源图片
-     */
-    private Bitmap getBitmapFromDrawable(Drawable drawable) {
-        if(drawable==null){
-            return null;
-        }
-        if(drawable instanceof BitmapDrawable){
-            return ((BitmapDrawable)drawable).getBitmap();
-        }
-        try {
-            Bitmap bitmap;
-            if(drawable instanceof ColorDrawable){
-                bitmap = Bitmap.createBitmap(COLOR_DRAWABLE_DEFAULT,COLOR_DRAWABLE_DEFAULT,BITMAP_CONFIG);
-            }else {
-                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight(),BITMAP_CONFIG);
-            }
-            Canvas canvas = new Canvas(bitmap);
-            drawable.setBounds(0,0,canvas.getWidth(),canvas.getHeight());
-            drawable.draw(canvas);
-            return bitmap;
-        }catch (OutOfMemoryError e){
-            return null;
-        }
-    }
-    /**
-     * 画圆形图的方法
-     */
-    private void setUp() {
-        if(!mReady){
-            mSetupPending=true;
-            return;
-        }
-        if(mBitmap==null){
-            return;
-        }
-        /**
-         *调用这个方法来产生一个画有一个位图的渲染器（Shader）。
-         bitmap   在渲染器内使用的位图
-         tileX      The tiling mode for x to draw the bitmap in.   在位图上X方向花砖模式
-         tileY     The tiling mode for y to draw the bitmap in.    在位图上Y方向花砖模式
-         TileMode：（一共有三种）
-         CLAMP  ：如果渲染器超出原始边界范围，会复制范围内边缘染色。
-         REPEAT ：横向和纵向的重复渲染器图片，平铺。
-         MIRROR ：横向和纵向的重复渲染器图片，这个和REPEAT 重复方式不一样，他是以镜像方式平铺。
-         */
-        mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        /**
-         * 设置画圆形的画笔
-         */
-        mDrawablePaint.setAntiAlias(true);
-        mDrawablePaint.setShader(mBitmapShader);
-        /**
-         * 设置画边框的画笔
-         */
-        mBorderPaint.setAntiAlias(true);
-        mBorderPaint.setStyle(Paint.Style.STROKE);
-        mBorderPaint.setColor(mBorderColor);
-        mBorderPaint.setStrokeWidth(mBitmapWidth);
-
-        mBitmapHeight = mBitmap.getHeight();
-        mBitmapWidth = mBitmap.getWidth();
-        /**
-         * 设置边框矩形的坐标
-         */
-        mBorderRect.set(0,0,getWidth(),getHeight());
-        /**
-         * 设置边框圆形的半径为图片的宽度和高度的一半的最大值
-         */
-        mBorderRadius=Math.max((mBorderRect.height()-mBorderWidth)/2,(mBorderRect.width()-mBorderWidth)/2);
-        /**
-         * 设置图片矩形的坐标
-         */
-        mDrawaleRect.set(mBorderWidth,mBorderWidth,mBorderRect.width() - mBorderWidth, mBorderRect.height() - mBorderWidth);
-        /**
-         * 设置图片圆形的半径为图片的宽度和高度的一半的最大值
-         */
-        mDrawableRadius = Math.max(mDrawaleRect.height() / 2, mDrawaleRect.width() / 2);
-
-        updateShaderMatrix();
-        /**
-         * 调用onDraw()方法进行绘画
-         */
-        invalidate();
-    }
-
-    private void updateShaderMatrix() {
-        float scale;
-        float dx = 0;
-        float dy = 0;
-        /**
-         * 重置
-         */
-        mShaderMatrix.set(null);
-        /**
-         *计算缩放比，因为如果图片的尺寸超过屏幕，那么就会自动匹配到屏幕的尺寸去显示。
-         * 确定移动的xy坐标
-         *
-         */
-        if(mBitmapWidth*mDrawaleRect.height()>mDrawaleRect.width()*mBitmapHeight){
-            scale = mDrawaleRect.width()/(float)mBitmapWidth;
-            dy=(mDrawaleRect.height()-mBitmapHeight*scale)*0.5f;
-        }else {
-            scale = mDrawaleRect.height()/(float)mBitmapHeight;
-            dx=(mDrawaleRect.width()-mBitmapWidth*scale)*0.5f;
-        }
-        mShaderMatrix.setScale(scale,scale);
-        mShaderMatrix.postTranslate((int)(dx+0.5f)+mBorderWidth,(int)(dy+0.5f)+mBorderWidth);
-        /**
-         * 设置shader的本地矩阵
-         */
-        mBitmapShader.setLocalMatrix(mShaderMatrix);
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        setup();
     }
 
     /**
@@ -335,7 +210,167 @@ public class CircleImageView extends ImageView {
         }
 
         mBorderWidth = borderWidth;
-        setUp();
+        setup();
     }
 
+    /**
+     * 设置资源图片
+     *
+     * @param bm
+     */
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+        super.setImageBitmap(bm);
+        mBitmap = bm;
+        setup();
+    }
+
+    /**
+     * 设置资源图片
+     *
+     * @param drawable
+     */
+    @Override
+    public void setImageDrawable(Drawable drawable) {
+        super.setImageDrawable(drawable);
+        mBitmap = getBitmapFromDrawable(drawable);
+        setup();
+    }
+
+    /**
+     * 设置资源id
+     *
+     * @param resId
+     */
+    @Override
+    public void setImageResource(int resId) {
+        super.setImageResource(resId);
+        mBitmap = getBitmapFromDrawable(getDrawable());
+        setup();
+    }
+
+    /**
+     * 获取资源图片
+     *
+     * @param drawable
+     * @return
+     */
+    private Bitmap getBitmapFromDrawable(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        try {
+            Bitmap bitmap;
+
+            if (drawable instanceof ColorDrawable) {
+                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
+            } else {
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
+            }
+
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        } catch (OutOfMemoryError e) {
+            return null;
+        }
+    }
+
+    /**
+     * 画圆形图的方法
+     */
+    private void setup() {
+        if (!mReady) {
+            mSetupPending = true;
+            return;
+        }
+
+        if (mBitmap == null) {
+            return;
+        }
+        /**
+         *调用这个方法来产生一个画有一个位图的渲染器（Shader）。
+         bitmap   在渲染器内使用的位图
+         tileX      The tiling mode for x to draw the bitmap in.   在位图上X方向花砖模式
+         tileY     The tiling mode for y to draw the bitmap in.    在位图上Y方向花砖模式
+         TileMode：（一共有三种）
+         CLAMP  ：如果渲染器超出原始边界范围，会复制范围内边缘染色。
+         REPEAT ：横向和纵向的重复渲染器图片，平铺。
+         MIRROR ：横向和纵向的重复渲染器图片，这个和REPEAT 重复方式不一样，他是以镜像方式平铺。
+         */
+        mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        /**
+         * 设置画圆形的画笔
+         */
+        mBitmapPaint.setAntiAlias(true);//设置抗锯齿
+        mBitmapPaint.setShader(mBitmapShader);//绘制图形时的图形变换
+
+        mBorderPaint.setStyle(Paint.Style.STROKE);
+        mBorderPaint.setAntiAlias(true);
+        mBorderPaint.setColor(mBorderColor);
+        mBorderPaint.setStrokeWidth(mBorderWidth);
+
+        mBitmapHeight = mBitmap.getHeight();
+        mBitmapWidth = mBitmap.getWidth();
+        /**
+         * 设置边框矩形的坐标
+         */
+        mBorderRect.set(0, 0, getWidth(), getHeight());
+        /**
+         * 设置边框圆形的半径为图片的宽度和高度的一半的最大值
+         */
+        mBorderRadius = Math.max((mBorderRect.height() - mBorderWidth) / 2, (mBorderRect.width() - mBorderWidth) / 2);
+        /**
+         * 设置图片矩形的坐标
+         */
+        mDrawableRect.set(mBorderWidth, mBorderWidth, mBorderRect.width() - mBorderWidth, mBorderRect.height() - mBorderWidth);
+        /**
+         * 设置图片圆形的半径为图片的宽度和高度的一半的最大值
+         */
+        mDrawableRadius = Math.max(mDrawableRect.height() / 2, mDrawableRect.width() / 2);
+
+        updateShaderMatrix();
+        /**
+         * 调用onDraw()方法进行绘画
+         */
+        invalidate();
+    }
+
+    /**
+     * 更新位图渲染
+     */
+    private void updateShaderMatrix() {
+        float scale;
+        float dx = 0;
+        float dy = 0;
+        /**
+         * 重置
+         */
+        mShaderMatrix.set(null);
+        /**
+         *计算缩放比，因为如果图片的尺寸超过屏幕，那么就会自动匹配到屏幕的尺寸去显示。
+         * 确定移动的xy坐标
+         *
+         */
+        if (mBitmapWidth * mDrawableRect.height() > mDrawableRect.width() * mBitmapHeight) {
+            scale = mDrawableRect.width() / (float) mBitmapWidth;
+            dy = (mDrawableRect.height() - mBitmapHeight * scale) * 0.5f;
+        } else {
+            scale = mDrawableRect.height() / (float) mBitmapHeight;
+            dx = (mDrawableRect.width() - mBitmapWidth * scale) * 0.5f;
+        }
+
+        mShaderMatrix.setScale(scale, scale);
+        mShaderMatrix.postTranslate((int) (dx + 0.5f) + mBorderWidth, (int) (dy + 0.5f) + mBorderWidth);
+        /**
+         * 设置shader的本地矩阵
+         */
+        mBitmapShader.setLocalMatrix(mShaderMatrix);
+    }
 }

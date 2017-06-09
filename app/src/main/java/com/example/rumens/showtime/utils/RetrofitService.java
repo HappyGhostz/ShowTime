@@ -35,6 +35,7 @@ import com.example.rumens.showtime.api.bean.RankingListItem;
 import com.example.rumens.showtime.api.bean.Rankings;
 import com.example.rumens.showtime.api.bean.Recommend;
 import com.example.rumens.showtime.api.bean.RecommendBookList;
+import com.example.rumens.showtime.api.bean.SongDetailInfo;
 import com.example.rumens.showtime.api.bean.SongListDetail;
 import com.example.rumens.showtime.api.bean.SpecialInfo;
 import com.example.rumens.showtime.api.bean.WelfarePhotoInfo;
@@ -558,6 +559,14 @@ public class RetrofitService {
 
     public static Observable<SongListDetail> getMusicListDetialAll(String musicUrlFormat, String musicUrlFrom, String musicUrlMethodSonglistDetail, String songListid) {
         return sMusicService.getSongListDetail(musicUrlFormat,musicUrlFrom,musicUrlMethodSonglistDetail,songListid)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Observable<SongDetailInfo> loadSongDetail(String musicUrlFrom2, String musicUrlVersion, String musicUrlFormat, String musicUrlMethodSongDetail, String song_id) {
+        return sMusicService.getSongDetail(musicUrlFrom2,musicUrlVersion,musicUrlFormat,musicUrlMethodSongDetail,song_id)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())

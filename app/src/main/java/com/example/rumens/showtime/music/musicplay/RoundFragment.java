@@ -39,11 +39,9 @@ public class RoundFragment extends BaseFragment {
             String picUrl = bundle.getString("picUrl");
             boolean isLocal = bundle.getBoolean(MusicPlay.LOCAL_IS);
             if(isLocal){
-//                ImageLoader.loadResGif(mContext, R.mipmap.localgif,mCivPhoto);
-                String local = "http://image.so.com/v?ie=utf-8&src=hao_360so&q=音乐专辑&correct=音乐专辑&cmsid=e7ba6c4f17314a9d674eca4b17d7aab7&cmran=0&cmras=0&gsrc=1#ie=utf-8&src=hao_360so&q=%E9%9F%B3%E4%B9%90%E4%B8%93%E8%BE%91&correct=%E9%9F%B3%E4%B9%90%E4%B8%93%E8%BE%91&gsrc=1&lightboxindex=43&id=39e8b68fdf4bd92b34f742211aeb2072&multiple=0&itemindex=0&dataindex=43&currsn=0";
-                ImageLoader.loadUrlGif(mContext,local,mCivPhoto);
+                ImageLoader.displayRoundRes(mContext,mCivPhoto,R.mipmap.muiscderault);
             }else {
-                ImageLoader.loadCenterCrop(mContext,picUrl,mCivPhoto,R.mipmap.muiscderault);
+                ImageLoader.displayRound(mContext,mCivPhoto,picUrl);
             }
         }
     }

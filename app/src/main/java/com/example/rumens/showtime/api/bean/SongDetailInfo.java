@@ -1,12 +1,17 @@
 package com.example.rumens.showtime.api.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+
 /**
  * @author Zhaochen Ping
  * @create 2017/5/25
  * @description
  */
 
-public class SongDetailInfo {
+public class SongDetailInfo implements Parcelable{
+
     /**
      * songinfo : {"special_type":0,"pic_huge":"","resource_type":"0","pic_premium":"http://musicdata.baidu.com/data2/pic/f8f2bac1a7444d6385d9e16f57e8afb5/261991690/261991690.jpg","havehigh":2,"author":"杨钰莹","toneid":"600902000007964201","has_mv":1,"song_id":"2121687","piao_id":"0","artist_id":"999","lrclink":"http://musicdata.baidu.com/data2/lrc/242441098/242441098.lrc","relate_status":"0","learn":1,"pic_big":"http://musicdata.baidu.com/data2/pic/f8f2bac1a7444d6385d9e16f57e8afb5/261991690/261991690.jpg@s_0,w_150","play_type":0,"album_id":"2121650","album_title":"也是情歌精选","bitrate_fee":"{\"0\":\"0|0\",\"1\":\"0|0\"}","song_source":"web","all_artist_id":"999","all_artist_ting_uid":"1451","all_rate":"31,64,128,192,256,320,flac","charge":0,"copy_type":"0","is_first_publish":0,"korean_bb_song":"0","pic_radio":"http://musicdata.baidu.com/data2/pic/f8f2bac1a7444d6385d9e16f57e8afb5/261991690/261991690.jpg@s_0,w_300","has_mv_mobile":0,"title":"轻轻地告诉你","pic_small":"http://musicdata.baidu.com/data2/pic/f8f2bac1a7444d6385d9e16f57e8afb5/261991690/261991690.jpg@s_0,w_90","album_no":"19","resource_type_ext":"0","ting_uid":"1451"}
      * error_code : 22000
@@ -17,6 +22,23 @@ public class SongDetailInfo {
     private int error_code;
     private BitrateBean bitrate;
     private boolean isOnClick =false;
+
+    protected SongDetailInfo(Parcel in) {
+        error_code = in.readInt();
+        isOnClick = in.readByte() != 0;
+    }
+
+    public static final Creator<SongDetailInfo> CREATOR = new Creator<SongDetailInfo>() {
+        @Override
+        public SongDetailInfo createFromParcel(Parcel in) {
+            return new SongDetailInfo(in);
+        }
+
+        @Override
+        public SongDetailInfo[] newArray(int size) {
+            return new SongDetailInfo[size];
+        }
+    };
 
     public boolean isOnClick() {
         return isOnClick;
@@ -50,7 +72,18 @@ public class SongDetailInfo {
         this.bitrate = bitrate;
     }
 
-    public static class SonginfoBean {
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(error_code);
+        dest.writeByte((byte) (isOnClick ? 1 : 0));
+    }
+
+    public static class SonginfoBean implements Parcelable{
         /**
          * special_type : 0
          * pic_huge :
@@ -122,6 +155,55 @@ public class SongDetailInfo {
         private String album_no;
         private String resource_type_ext;
         private String ting_uid;
+
+        protected SonginfoBean(Parcel in) {
+            special_type = in.readInt();
+            pic_huge = in.readString();
+            resource_type = in.readString();
+            pic_premium = in.readString();
+            havehigh = in.readInt();
+            author = in.readString();
+            toneid = in.readString();
+            has_mv = in.readInt();
+            song_id = in.readString();
+            piao_id = in.readString();
+            artist_id = in.readString();
+            lrclink = in.readString();
+            relate_status = in.readString();
+            learn = in.readInt();
+            pic_big = in.readString();
+            play_type = in.readInt();
+            album_id = in.readString();
+            album_title = in.readString();
+            bitrate_fee = in.readString();
+            song_source = in.readString();
+            all_artist_id = in.readString();
+            all_artist_ting_uid = in.readString();
+            all_rate = in.readString();
+            charge = in.readInt();
+            copy_type = in.readString();
+            is_first_publish = in.readInt();
+            korean_bb_song = in.readString();
+            pic_radio = in.readString();
+            has_mv_mobile = in.readInt();
+            title = in.readString();
+            pic_small = in.readString();
+            album_no = in.readString();
+            resource_type_ext = in.readString();
+            ting_uid = in.readString();
+        }
+
+        public static final Creator<SonginfoBean> CREATOR = new Creator<SonginfoBean>() {
+            @Override
+            public SonginfoBean createFromParcel(Parcel in) {
+                return new SonginfoBean(in);
+            }
+
+            @Override
+            public SonginfoBean[] newArray(int size) {
+                return new SonginfoBean[size];
+            }
+        };
 
         public int getSpecial_type() {
             return special_type;
@@ -394,9 +476,52 @@ public class SongDetailInfo {
         public void setTing_uid(String ting_uid) {
             this.ting_uid = ting_uid;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(special_type);
+            dest.writeString(pic_huge);
+            dest.writeString(resource_type);
+            dest.writeString(pic_premium);
+            dest.writeInt(havehigh);
+            dest.writeString(author);
+            dest.writeString(toneid);
+            dest.writeInt(has_mv);
+            dest.writeString(song_id);
+            dest.writeString(piao_id);
+            dest.writeString(artist_id);
+            dest.writeString(lrclink);
+            dest.writeString(relate_status);
+            dest.writeInt(learn);
+            dest.writeString(pic_big);
+            dest.writeInt(play_type);
+            dest.writeString(album_id);
+            dest.writeString(album_title);
+            dest.writeString(bitrate_fee);
+            dest.writeString(song_source);
+            dest.writeString(all_artist_id);
+            dest.writeString(all_artist_ting_uid);
+            dest.writeString(all_rate);
+            dest.writeInt(charge);
+            dest.writeString(copy_type);
+            dest.writeInt(is_first_publish);
+            dest.writeString(korean_bb_song);
+            dest.writeString(pic_radio);
+            dest.writeInt(has_mv_mobile);
+            dest.writeString(title);
+            dest.writeString(pic_small);
+            dest.writeString(album_no);
+            dest.writeString(resource_type_ext);
+            dest.writeString(ting_uid);
+        }
     }
 
-    public static class BitrateBean {
+    public static class BitrateBean implements Parcelable{
         /**
          * show_link : http://zhangmenshiting.baidu.com/data2/music/134347684/134347684.mp3?xcode=294ea175cde8d4e6c6826868de970894
          * free : 1
@@ -420,6 +545,29 @@ public class SongDetailInfo {
         private String hash;
 
 
+        protected BitrateBean(Parcel in) {
+            show_link = in.readString();
+            free = in.readInt();
+            song_file_id = in.readInt();
+            file_size = in.readInt();
+            file_extension = in.readString();
+            file_duration = in.readInt();
+            file_bitrate = in.readInt();
+            file_link = in.readString();
+            hash = in.readString();
+        }
+
+        public static final Creator<BitrateBean> CREATOR = new Creator<BitrateBean>() {
+            @Override
+            public BitrateBean createFromParcel(Parcel in) {
+                return new BitrateBean(in);
+            }
+
+            @Override
+            public BitrateBean[] newArray(int size) {
+                return new BitrateBean[size];
+            }
+        };
 
         public String getShow_link() {
             return show_link;
@@ -492,5 +640,24 @@ public class SongDetailInfo {
         public void setHash(String hash) {
             this.hash = hash;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(show_link);
+            dest.writeInt(free);
+            dest.writeInt(song_file_id);
+            dest.writeInt(file_size);
+            dest.writeString(file_extension);
+            dest.writeInt(file_duration);
+            dest.writeInt(file_bitrate);
+            dest.writeString(file_link);
+            dest.writeString(hash);
+        }
     }
 }
+
