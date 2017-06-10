@@ -7,11 +7,14 @@ import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.SlideOnScaleAndeAlphaAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.helper.RecyclerViewHelper;
+import com.example.rumens.showtime.api.IMusicsApi;
 import com.example.rumens.showtime.api.bean.RankingListItem;
 import com.example.rumens.showtime.base.BaseFragment;
 import com.example.rumens.showtime.inject.component.DaggerMusicRankComponent;
 import com.example.rumens.showtime.inject.modules.MusicRankModule;
+import com.example.rumens.showtime.utils.RetrofitService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,6 +32,7 @@ public class MusicRankFragment extends BaseFragment implements IMusicRankView {
     RecyclerView mRvListMusic;
     @Inject
     BaseQuickAdapter mAdapter;
+    private List<RankingListItem.RangkingDetail> mRangkingDetails = new ArrayList<>();
 
 
     @Override
@@ -64,6 +68,6 @@ public class MusicRankFragment extends BaseFragment implements IMusicRankView {
     @Override
     public void loadListMusic(List<RankingListItem.RangkingDetail> details) {
         mAdapter.updateItems(details);
+        mRangkingDetails.addAll(details);
     }
-
 }

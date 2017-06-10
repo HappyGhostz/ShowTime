@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,14 +19,19 @@ import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.SlideOnScaleAndeAlphaAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.helper.RecyclerViewHelper;
+import com.example.rumens.showtime.adapter.listener.OnRecyclerViewItemClickListener;
+import com.example.rumens.showtime.api.IMusicsApi;
 import com.example.rumens.showtime.api.bean.RankingListDetail;
 import com.example.rumens.showtime.api.bean.SongDetailInfo;
 import com.example.rumens.showtime.base.BaseActivity;
 import com.example.rumens.showtime.base.IBasePresenter;
 import com.example.rumens.showtime.inject.component.DaggerMusicRankingListDetailComponent;
 import com.example.rumens.showtime.inject.modules.MusicRankingListDetailModule;
+import com.example.rumens.showtime.music.musicplay.MusicPlay;
 import com.example.rumens.showtime.utils.DefIconFactory;
 import com.example.rumens.showtime.utils.ImageLoader;
+import com.example.rumens.showtime.utils.RetrofitService;
+import com.example.rumens.showtime.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +40,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import rx.Subscriber;
+import rx.functions.Action0;
 
 /**
  * @author Zhaochen Ping
@@ -57,7 +65,7 @@ public class MusicRankingListDetailActivity extends BaseActivity<IBasePresenter>
     @BindView(R.id.irv_song_detail)
     RecyclerView mIrvSongDetail;
     @BindView(R.id.bottom_container)
-    FrameLayout mBottomContainer;
+    LinearLayout mBottomContainer;
     private int mType;
     @Inject
     BaseQuickAdapter mAdapter;
@@ -71,6 +79,10 @@ public class MusicRankingListDetailActivity extends BaseActivity<IBasePresenter>
     //song_id 对应的在集合中的位置
     private HashMap<String, Integer> positionMap = new HashMap<>();
     private String mTitle;
+    private List<SongDetailInfo> mSongDetialInfos;
+    private List<String> mSongTitle ;
+    private List<String> mSongPic;
+    private List<String> mSongUrl;
 
     @Override
     public void loadRankPlayList(RankingListDetail detail) {
@@ -84,12 +96,40 @@ public class MusicRankingListDetailActivity extends BaseActivity<IBasePresenter>
     }
 
     private void initMusicList() {
+        mSongTitle = new ArrayList<>();
+        mSongPic=new ArrayList<>();
+        mSongUrl=new ArrayList<>();
         for (int i = 0; i < mList.size(); i++) {
             RankingListDetail.SongListBean songDetail = mList.get(i);
             String song_id = songDetail.getSong_id();
             positionMap.put(song_id, i);
-//            mPresenter.requestSongDetail(AppConstantValue.MUSIC_URL_FROM_2, AppConstantValue.MUSIC_URL_VERSION, AppConstantValue.MUSIC_URL_FORMAT, AppConstantValue.MUSIC_URL_METHOD_SONG_DETAIL
-//                    , song_id);
+            RetrofitService.loadSongDetail(IMusicsApi.MUSIC_URL_FROM_2, IMusicsApi.MUSIC_URL_VERSION,
+                    IMusicsApi.MUSIC_URL_FORMAT, IMusicsApi.MUSIC_URL_METHOD_SONG_DETAIL
+                        , song_id)
+                    .doOnSubscribe(new Action0() {
+                        @Override
+                        public void call() {
+                            mBottomContainer.setVisibility(View.VISIBLE);
+                        }
+                    })
+                    .subscribe(new Subscriber<SongDetailInfo>() {
+                        @Override
+                        public void onCompleted() {
+                            mBottomContainer.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            ToastUtils.showToast("哇,出错了哎-o-");
+                        }
+
+                        @Override
+                        public void onNext(SongDetailInfo songDetailInfo) {
+                            mSongTitle.add(songDetailInfo.getSonginfo().getTitle());
+                            mSongPic.add(songDetailInfo.getSonginfo().getPic_premium());
+                            mSongUrl.add(songDetailInfo.getBitrate().getFile_link());
+                        }
+                    });
         }
     }
 
@@ -116,6 +156,15 @@ public class MusicRankingListDetailActivity extends BaseActivity<IBasePresenter>
         mAdapter.addHeaderView(view);
         SlideOnScaleAndeAlphaAdapter slideAdapter = new SlideOnScaleAndeAlphaAdapter(mAdapter);
         RecyclerViewHelper.initRecyclerViewV(this,mIrvSongDetail,true,slideAdapter);
+        mAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                String songUrl = mSongUrl.get(position - 1);
+                String songPic = mSongPic.get(position - 1);
+                String songTitle = mSongTitle.get(position - 1);
+                MusicPlay.lunchNet(MusicRankingListDetailActivity.this,songUrl,songPic,songTitle,mSongUrl,mSongPic,mSongTitle,position);
+            }
+        });
     }
 
     private void initHeadView(View view) {

@@ -218,7 +218,7 @@ public class MusicPlay extends BaseActivity {
         mContext.startActivity(intent);
         ((Activity) mContext).overridePendingTransition(R.anim.fade_entry, R.anim.hold);
     }
-    /*public static void lunchNet(Context context, SongDetailInfo songDetailInfo, List<SongDetailInfo> mSongDetialInfos, int position) {
+   /* public static void lunchNet(Context context, SongDetailInfo songDetailInfo, List<SongDetailInfo> mSongDetialInfos, int position) {
         Intent intent = new Intent(context,MusicPlay.class);
         intent.putExtra(RECOMMEND_POSITION,position);
         intent.putExtra(LOCAL_IS,false);
