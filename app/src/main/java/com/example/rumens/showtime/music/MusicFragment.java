@@ -4,6 +4,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.rumens.showtime.R;
@@ -52,6 +53,16 @@ public class MusicFragment extends BaseFragment {
         initToolBar(mToolBar,true,"音乐爽听");
         mViewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
         initData();
+        searchMusic();
+    }
+
+    private void searchMusic() {
+        mTvMusicSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void initData() {
