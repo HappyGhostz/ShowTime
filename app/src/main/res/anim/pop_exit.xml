@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false">
+    <translate
+        android:fromXDelta="0"
+        android:toXDelta="100"
+        android:duration = "@android:integer/config_longAnimTime"
+        android:interpolator = "@anim/anticipate"
+        />
+    <alpha android:fromAlpha="1.0"
+        android:toAlpha="0.0"
+        android:duration="@android:integer/config_longAnimTime"
+        android:interpolator = "@anim/accelerate_cubic"
+        />
+
+</set>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+        <com.example.rumens.showtime.widget.CircleImageView
+            android:id="@+id/img_album"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:src="@mipmap/background_default" />
+
+        <TextView
+            android:id="@+id/music_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/tv_album"
+            android:layout_alignTop="@+id/img_album"
+            android:layout_marginTop="41dp"
+            android:text="白狐"
+            android:textSize="18sp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/tv_album"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_alignBottom="@+id/img_album"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toEndOf="@+id/img_album"
+            android:text="白狐"
+            android:textSize="18sp"
+            android:textColor="#000000"/>
+</RelativeLayout>

@@ -39,7 +39,7 @@
                     android:layout_height="@dimen/tab_height"
                     android:layout_weight="1"
                     app:tabIndicatorColor="@android:color/white"
-                    app:tabMode="fixed" />
+                    app:tabMode="scrollable"/>
 
                 <ImageView
                     android:layout_width="2dp"

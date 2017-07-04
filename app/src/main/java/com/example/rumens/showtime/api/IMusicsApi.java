@@ -2,6 +2,7 @@ package com.example.rumens.showtime.api;
 
 import com.example.rumens.showtime.api.bean.RankingListDetail;
 import com.example.rumens.showtime.api.bean.RankingListItem;
+import com.example.rumens.showtime.api.bean.SearchMusic;
 import com.example.rumens.showtime.api.bean.SongDetailInfo;
 import com.example.rumens.showtime.api.bean.SongListDetail;
 import com.example.rumens.showtime.api.bean.WrapperSongListInfo;
@@ -75,4 +76,5 @@ public interface IMusicsApi {
                                              @Query("format") String format,
                                              @Query("method") String method,
                                              @Query("songid") String songid);
+
 }

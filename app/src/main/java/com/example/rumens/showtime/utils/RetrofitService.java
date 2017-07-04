@@ -21,6 +21,7 @@ import com.example.rumens.showtime.api.bean.CategoryList;
 import com.example.rumens.showtime.api.bean.ChapterReadBean;
 import com.example.rumens.showtime.api.bean.DouyuLiveListItemBean;
 import com.example.rumens.showtime.api.bean.HotReview;
+import com.example.rumens.showtime.api.bean.IMusicSearchApi;
 import com.example.rumens.showtime.api.bean.LiveBaseBean;
 import com.example.rumens.showtime.api.bean.LiveDetailBean;
 import com.example.rumens.showtime.api.bean.LiveListItemBean;
@@ -35,6 +36,7 @@ import com.example.rumens.showtime.api.bean.RankingListItem;
 import com.example.rumens.showtime.api.bean.Rankings;
 import com.example.rumens.showtime.api.bean.Recommend;
 import com.example.rumens.showtime.api.bean.RecommendBookList;
+import com.example.rumens.showtime.api.bean.SearchMusic;
 import com.example.rumens.showtime.api.bean.SongDetailInfo;
 import com.example.rumens.showtime.api.bean.SongListDetail;
 import com.example.rumens.showtime.api.bean.SpecialInfo;
@@ -97,6 +99,7 @@ public class RetrofitService {
     private static final String BASE_LIVE_DOUYU_VIDEO_URL ="http://coapi.douyucdn.cn/" ;
     private static final String BASE_BOOKE_URL ="http://api.zhuishushenqi.com" ;
     private static final String BASE_MUSIC_URL ="http://tingapi.ting.baidu.com/v1/restserver/" ;
+    private static final String BASE_MUSIC_SEARCH_URL="http://s.music.163.com/search/";
 
     private static INewsApi sNewsService;
     private static IWelfareApi sWelfareService;
@@ -105,6 +108,7 @@ public class RetrofitService {
     private static IDouyuVideoApi sDouyuLiveVideoService;
     private static IBookApi sBookService;
     private static IMusicsApi sMusicService;
+    private static IMusicSearchApi sMusicSearch;
     // 递增页码
     private static final int INCREASE_PAGE = 20;
     private static Context mContext;
@@ -196,6 +200,14 @@ public class RetrofitService {
                 .baseUrl(BASE_MUSIC_URL)
                 .build();
         sMusicService= retrofit.create(IMusicsApi.class);
+
+        retrofit = new Retrofit.Builder()
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl(BASE_MUSIC_SEARCH_URL)
+                .build();
+        sMusicSearch = retrofit.create(IMusicSearchApi.class);
 
 
     }
@@ -567,6 +579,13 @@ public class RetrofitService {
 
     public static Observable<SongDetailInfo> loadSongDetail(String musicUrlFrom2, String musicUrlVersion, String musicUrlFormat, String musicUrlMethodSongDetail, String song_id) {
         return sMusicService.getSongDetail(musicUrlFrom2,musicUrlVersion,musicUrlFormat,musicUrlMethodSongDetail,song_id)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public static Observable<SearchMusic> getSearchMusicList(String musicName,int limit,int offset){
+        return sMusicSearch.getSearchMusic(1,musicName,limit,offset)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())

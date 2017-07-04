@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height"
             app:tabIndicatorColor="@android:color/white"
-            app:tabMode="fixed"
+            app:tabMode="scrollable"
             android:layout_weight="1"/>
     </LinearLayout>
 
