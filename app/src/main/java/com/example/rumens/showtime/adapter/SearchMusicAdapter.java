@@ -1,6 +1,7 @@
 package com.example.rumens.showtime.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -9,7 +10,6 @@ import com.example.rumens.showtime.adapter.baseadapter.BaseQuickAdapter;
 import com.example.rumens.showtime.adapter.baseadapter.BaseViewHolder;
 import com.example.rumens.showtime.api.bean.SearchMusic;
 import com.example.rumens.showtime.music.searchmusic.SearchMusicPlayActivity;
-import com.example.rumens.showtime.music.searchmusic.SearchPlayActivity;
 import com.example.rumens.showtime.utils.ImageLoader;
 
 /**
@@ -37,7 +37,7 @@ public class SearchMusicAdapter extends BaseQuickAdapter<SearchMusic.ResultBean.
         holder.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SearchPlayActivity.lunch(mContext,item.getPage(),item.getName());
+               SearchMusicPlayActivity.lunch(mContext,item.getName(),item.getPage());
             }
         });
     }

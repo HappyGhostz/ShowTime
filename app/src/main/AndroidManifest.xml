@@ -138,6 +138,7 @@
         <activity android:name=".music.listplay.MusicListDetialActivity"/>
         <activity android:name=".music.musicplay.MusicPlay"/>
         <service android:name=".music.musicplay.service.MusicPlayServise"/>
+        <activity android:name=".music.searchmusic.SearchMusicPlayActivity"/>
         <activity android:name=".music.searchmusic.SearchMusicShow"/>
     </application>
 
