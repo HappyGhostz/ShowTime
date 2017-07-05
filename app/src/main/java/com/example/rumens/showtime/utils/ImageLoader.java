@@ -1,11 +1,13 @@
 package com.example.rumens.showtime.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.rumens.showtime.R;
@@ -140,4 +142,26 @@ public class ImageLoader {
         BitmapFactory.decodeFile(file.getAbsolutePath(), options);
         return options.outWidth + "*" + options.outHeight;
     }
+     public static Bitmap getBitMap(Context context,String url) {
+//         Bitmap bitmap = null;
+//         try {
+//             bitmap = Glide.with(context).load(url).asBitmap().centerCrop().into(500, 500).get();
+//         } catch (InterruptedException e) {
+//             e.printStackTrace();
+//         } catch (ExecutionException e) {
+//             e.printStackTrace();
+//         }
+//         return bitmap;
+         try {
+             File file = Glide.with(context).load(url)
+                     .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
+             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+             return  bitmap;
+         } catch (InterruptedException e) {
+             e.printStackTrace();
+         } catch (ExecutionException e) {
+             e.printStackTrace();
+         }
+         return  null;
+     }
 }

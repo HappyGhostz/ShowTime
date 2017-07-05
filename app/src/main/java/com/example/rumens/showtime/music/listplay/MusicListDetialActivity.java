@@ -159,6 +159,7 @@ public class MusicListDetialActivity extends BaseActivity<IBasePresenter> implem
     private List<String> mSongTitle = new ArrayList<>();
     private List<String> mSongPic=new ArrayList<>();
     private List<String> mSongUrl=new ArrayList<>();
+    private List<String> mSongArt=new ArrayList<>();
 
     private void getSongDetial(String song_id, final boolean isAddList) {
         RetrofitService.loadSongDetail(IMusicsApi.MUSIC_URL_FROM_2, IMusicsApi.MUSIC_URL_VERSION,
@@ -188,6 +189,7 @@ public class MusicListDetialActivity extends BaseActivity<IBasePresenter> implem
                             mSongTitle.add(songDetailInfo.getSonginfo().getTitle());
                             mSongPic.add(songDetailInfo.getSonginfo().getPic_premium());
                             mSongUrl.add(songDetailInfo.getBitrate().getFile_link());
+                            mSongArt.add(songDetailInfo.getSonginfo().getAuthor());
 
                         }else {
                             mSongDetialinfo=songDetailInfo;
@@ -223,7 +225,7 @@ public class MusicListDetialActivity extends BaseActivity<IBasePresenter> implem
                          ToastUtils.showToast("歌曲还未准备还");
                          return;
                      }
-                MusicPlay.lunchNet(MusicListDetialActivity.this,songUrl,songPic,songTitle,mSongUrl,mSongPic,mSongTitle,position);
+                MusicPlay.lunchNet(MusicListDetialActivity.this,songUrl,songPic,songTitle,mSongUrl,mSongPic,mSongTitle,position, mSongArt);
             }
         });
 

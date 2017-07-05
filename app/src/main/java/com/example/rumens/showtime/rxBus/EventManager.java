@@ -24,4 +24,8 @@ public class EventManager {
     public static void refreshSubCategory(String minor, String type) {
         EventBus.getDefault().post(new SubEvent(minor, type));
     }
+
+    public  static void postSomeMessage(String message){
+        EventBus.getDefault().post(message);
+    }
 }

@@ -83,6 +83,7 @@ public class MusicRankingListDetailActivity extends BaseActivity<IBasePresenter>
     private List<String> mSongTitle ;
     private List<String> mSongPic;
     private List<String> mSongUrl;
+    private List<String> mSongArt;
 
     @Override
     public void loadRankPlayList(RankingListDetail detail) {
@@ -99,6 +100,7 @@ public class MusicRankingListDetailActivity extends BaseActivity<IBasePresenter>
         mSongTitle = new ArrayList<>();
         mSongPic=new ArrayList<>();
         mSongUrl=new ArrayList<>();
+        mSongArt = new ArrayList<>();
         for (int i = 0; i < mList.size(); i++) {
             RankingListDetail.SongListBean songDetail = mList.get(i);
             String song_id = songDetail.getSong_id();
@@ -128,6 +130,7 @@ public class MusicRankingListDetailActivity extends BaseActivity<IBasePresenter>
                             mSongTitle.add(songDetailInfo.getSonginfo().getTitle());
                             mSongPic.add(songDetailInfo.getSonginfo().getPic_premium());
                             mSongUrl.add(songDetailInfo.getBitrate().getFile_link());
+                            mSongArt.add(songDetailInfo.getSonginfo().getAuthor());
                         }
                     });
         }
@@ -162,7 +165,7 @@ public class MusicRankingListDetailActivity extends BaseActivity<IBasePresenter>
                 String songUrl = mSongUrl.get(position - 1);
                 String songPic = mSongPic.get(position - 1);
                 String songTitle = mSongTitle.get(position - 1);
-                MusicPlay.lunchNet(MusicRankingListDetailActivity.this,songUrl,songPic,songTitle,mSongUrl,mSongPic,mSongTitle,position);
+                MusicPlay.lunchNet(MusicRankingListDetailActivity.this,songUrl,songPic,songTitle,mSongUrl,mSongPic,mSongTitle,position,mSongArt);
             }
         });
     }

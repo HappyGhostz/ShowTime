@@ -22,6 +22,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -32,14 +35,12 @@ import com.bumptech.glide.request.FutureTarget;
 import com.example.rumens.showtime.App;
 import com.example.rumens.showtime.R;
 import com.example.rumens.showtime.adapter.ViewPagerAdapter;
-import com.example.rumens.showtime.adapter.listener.OnRecyclerViewItemClickListener;
 import com.example.rumens.showtime.api.bean.SongDetailInfo;
-import com.example.rumens.showtime.api.bean.SongListDetail;
 import com.example.rumens.showtime.api.bean.SongLocalBean;
 import com.example.rumens.showtime.base.BaseActivity;
 import com.example.rumens.showtime.constant.ConstantUitles;
-import com.example.rumens.showtime.music.listplay.MusicListDetialActivity;
 import com.example.rumens.showtime.music.musicplay.service.MusicPlayServise;
+import com.example.rumens.showtime.rxBus.EventManager;
 import com.example.rumens.showtime.rxBus.RxBus;
 import com.example.rumens.showtime.rxBus.event.MusicContralEvent;
 import com.example.rumens.showtime.utils.SharedPreferencesUtil;
@@ -51,8 +52,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -83,6 +86,7 @@ public class MusicPlay extends BaseActivity {
     public static final String MUSIC_NET_PIC_LIST = "songpiclist";
     public static final String MUSIC_NET_TITLE_LIST = "songtitlelist";
     public static final String MUSIC_SELECT = "isselect";
+    public static final String MUSIC_NET_ART_LIST = "songart";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.view_pager)
@@ -117,16 +121,18 @@ public class MusicPlay extends BaseActivity {
     ImageView mIvPlayingPlaylist;
     @BindView(R.id.iv_albumart)
     ImageView ivAlbumart;
+    @BindView(R.id.image_rotate)
+    ImageView mImageRotate;
     private SongLocalBean mLocalMusic;
     private int mPosition;
     private MusicServiceConnect mMusicServiceConnect;
     private static MusicPlayServise.MusicBind mMusicBind;
     private RxBus rxBus;
     private SongLocalBean mLocalSongBean;
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case MUSIC_PLAYING_CURENT_DURATION:
                     upDataPlayTime();
                     break;
@@ -135,13 +141,14 @@ public class MusicPlay extends BaseActivity {
     };
     private boolean isLocal;
     private SongDetailInfo mSongDetialInfo;
+    private Animation mRotateAnimation;
 
     @Override
     protected void updateViews() {
         mSbPlaySeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    seekBar.setProgress(progress);
+                seekBar.setProgress(progress);
 
             }
 
@@ -161,16 +168,16 @@ public class MusicPlay extends BaseActivity {
     @Override
     protected void initView() {
         Intent intent = getIntent();
-        if(isLocal){
+        if (isLocal) {
             SongLocalBean songLocalBean = (SongLocalBean) intent.getParcelableExtra(LOCAL_MUSIC);
-            initToolBar(mToolbar,true,songLocalBean.title);
-        }else{
+            initToolBar(mToolbar, true, songLocalBean.title);
+        } else {
 //            ArrayList<SongDetailInfo> mSongInfos = intent.getParcelableArrayListExtra(RECOMMEND_SONG_LIST);
             boolean isRank = intent.getBooleanExtra(MUSIC_IS_RANK, false);
 //            SongDetailInfo songinfo= intent.getExtras().getParcelable(RECOMMEND_MUSIC);
             String songTitle = intent.getStringExtra(MUSIC_NET_TITLE);
-            initToolBar(mToolbar,true,songTitle);
-            picUrl=intent.getStringExtra(MUSIC_NET_PIC);
+            initToolBar(mToolbar, true, songTitle);
+            picUrl = intent.getStringExtra(MUSIC_NET_PIC);
         }
         intent.setClass(getApplicationContext(), MusicPlayServise.class);
         startService(intent);
@@ -179,15 +186,17 @@ public class MusicPlay extends BaseActivity {
         mIvPlayingPlay.setImageResource(R.mipmap.play_rdi_btn_pause);
         initViewPager();
         pictureDim();
-         mIvNeedle.setRotation(0);
+        mIvNeedle.setRotation(0);
     }
-    private String picUrl=null;
+
+    private String picUrl = null;
+
     private void initViewPager() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(RoundFragment.lunch(this,isLocal,picUrl));
+        fragments.add(RoundFragment.lunch(this, isLocal, picUrl));
         List<String> titles = new ArrayList<>();
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.setItems(fragments,titles);
+        viewPagerAdapter.setItems(fragments, titles);
         mViewPager.setAdapter(viewPagerAdapter);
         mViewPager.setCurrentItem(0);
 
@@ -201,7 +210,7 @@ public class MusicPlay extends BaseActivity {
     @Override
     protected void initInjector() {
         isLocal = getIntent().getBooleanExtra(LOCAL_IS, false);
-        if(isLocal){
+        if (isLocal) {
             mPosition = getIntent().getIntExtra(LOCAL_POSITION, 0);
         }
         initRxBus();
@@ -213,34 +222,37 @@ public class MusicPlay extends BaseActivity {
         intent.putExtra(LOCAL_MUSIC, item);
         intent.putExtra(LOCAL_POSITION, adapterPosition);
         intent.putExtra(LOCAL_IS, true);
-        intent.putExtra(MUSIC_SELECT,true);
+        intent.putExtra(MUSIC_SELECT, true);
         intent.putParcelableArrayListExtra(LOCAL_SONG_LIST, (ArrayList<? extends Parcelable>) songs);
         mContext.startActivity(intent);
         ((Activity) mContext).overridePendingTransition(R.anim.fade_entry, R.anim.hold);
     }
-   /* public static void lunchNet(Context context, SongDetailInfo songDetailInfo, List<SongDetailInfo> mSongDetialInfos, int position) {
-        Intent intent = new Intent(context,MusicPlay.class);
-        intent.putExtra(RECOMMEND_POSITION,position);
-        intent.putExtra(LOCAL_IS,false);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(RECOMMEND_MUSIC,songDetailInfo);
-        intent.putExtras(bundle);
-//        intent.putExtra(RECOMMEND_MUSIC,songDetailInfo);
-        intent.putParcelableArrayListExtra(RECOMMEND_SONG_LIST, (ArrayList<? extends Parcelable>) mSongDetialInfos);
-        context.startActivity(intent);
-        ((Activity) context).overridePendingTransition(R.anim.fade_entry, R.anim.hold);
-    }*/
-    public static void lunchNet(Context context, String songUrl, String songPic, String songTitle, List<String> mSongUrl, List<String> mSongPic, List<String> mSongTitle, int position) {
-        Intent intent = new Intent(context,MusicPlay.class);
-        intent.putExtra(RECOMMEND_POSITION,position);
-        intent.putExtra(LOCAL_IS,false);
-        intent.putExtra(MUSIC_NET_URL,songUrl);
-        intent.putExtra(MUSIC_NET_PIC,songPic);
-        intent.putExtra(MUSIC_SELECT,true);
-        intent.putExtra(MUSIC_NET_TITLE,songTitle);
+
+    /* public static void lunchNet(Context context, SongDetailInfo songDetailInfo, List<SongDetailInfo> mSongDetialInfos, int position) {
+         Intent intent = new Intent(context,MusicPlay.class);
+         intent.putExtra(RECOMMEND_POSITION,position);
+         intent.putExtra(LOCAL_IS,false);
+         Bundle bundle = new Bundle();
+         bundle.putParcelable(RECOMMEND_MUSIC,songDetailInfo);
+         intent.putExtras(bundle);
+ //        intent.putExtra(RECOMMEND_MUSIC,songDetailInfo);
+         intent.putParcelableArrayListExtra(RECOMMEND_SONG_LIST, (ArrayList<? extends Parcelable>) mSongDetialInfos);
+         context.startActivity(intent);
+         ((Activity) context).overridePendingTransition(R.anim.fade_entry, R.anim.hold);
+     }*/
+    public static void lunchNet(Context context, String songUrl, String songPic, String songTitle, List<String> mSongUrl,
+                                List<String> mSongPic, List<String> mSongTitle, int position, List<String> mSongArt) {
+        Intent intent = new Intent(context, MusicPlay.class);
+        intent.putExtra(RECOMMEND_POSITION, position);
+        intent.putExtra(LOCAL_IS, false);
+        intent.putExtra(MUSIC_NET_URL, songUrl);
+        intent.putExtra(MUSIC_NET_PIC, songPic);
+        intent.putExtra(MUSIC_SELECT, true);
+        intent.putExtra(MUSIC_NET_TITLE, songTitle);
         intent.putStringArrayListExtra(MUSIC_NET_URL_LIST, (ArrayList<String>) mSongUrl);
         intent.putStringArrayListExtra(MUSIC_NET_PIC_LIST, (ArrayList<String>) mSongPic);
         intent.putStringArrayListExtra(MUSIC_NET_TITLE_LIST, (ArrayList<String>) mSongTitle);
+        intent.putStringArrayListExtra(MUSIC_NET_ART_LIST, (ArrayList<String>) mSongArt);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.fade_entry, R.anim.hold);
     }
@@ -250,10 +262,10 @@ public class MusicPlay extends BaseActivity {
         registerRxBus(MusicContralEvent.class, new Action1<MusicContralEvent>() {
             @Override
             public void call(MusicContralEvent musicContralEvent) {
-                if(isLocal){
+                if (isLocal) {
                     mLocalSongBean = musicContralEvent.getSongBean();
                     getLocalSongInfos(mLocalSongBean);
-                }else {
+                } else {
                     String title = musicContralEvent.getTitle();
                     picUrl = musicContralEvent.getList();
                     getNetSongInfos(title);
@@ -267,7 +279,7 @@ public class MusicPlay extends BaseActivity {
     }
 
     private void getNetSongInfos(String string) {
-        initToolBar(mToolbar,true,string);
+        initToolBar(mToolbar, true, string);
         setPlayTime();
     }
 
@@ -285,12 +297,12 @@ public class MusicPlay extends BaseActivity {
         String durationPgFormat = StringUtils.formatTime(duration);
         mTvMusicDurationPlayed.setText(durationPgFormat);
         mSbPlaySeek.setProgress(duration);
-        handler.sendEmptyMessageDelayed(MUSIC_PLAYING_CURENT_DURATION,1000);
+        handler.sendEmptyMessageDelayed(MUSIC_PLAYING_CURENT_DURATION, 1000);
     }
 
 
     private void getLocalSongInfos(SongLocalBean mLocalSongBean) {
-        initToolBar(mToolbar,true,mLocalSongBean.title);
+        initToolBar(mToolbar, true, mLocalSongBean.title);
         setPlayTime();
     }
 
@@ -327,24 +339,24 @@ public class MusicPlay extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_playing_mode:
-                MusicPlayServise.mCurrentMode = ++MusicPlayServise.mCurrentMode%3;
+                MusicPlayServise.mCurrentMode = ++MusicPlayServise.mCurrentMode % 3;
                 upDataMusicMode();
-                SharedPreferencesUtil.getInstance().putInt(ConstantUitles.MUSIC_MODE,MusicPlayServise.mCurrentMode);
+                SharedPreferencesUtil.getInstance().putInt(ConstantUitles.MUSIC_MODE, MusicPlayServise.mCurrentMode);
                 break;
             case R.id.iv_playing_pre:
-                mMusicBind.getMusicServiceInstance().preOrNext(false,isLocal);
+                mMusicBind.getMusicServiceInstance().preOrNext(false, isLocal);
                 break;
             case R.id.iv_playing_play:
                 upDataMusicState();
                 break;
             case R.id.iv_playing_next:
-                mMusicBind.getMusicServiceInstance().preOrNext(true,isLocal);
+                mMusicBind.getMusicServiceInstance().preOrNext(true, isLocal);
                 break;
         }
     }
 
     private void upDataMusicMode() {
-        switch (MusicPlayServise.mCurrentMode){
+        switch (MusicPlayServise.mCurrentMode) {
             case MusicPlayServise.SINGO_MODE:
                 mIvPlayingMode.setImageResource(R.mipmap.play_icn_one);
                 break;
@@ -360,21 +372,38 @@ public class MusicPlay extends BaseActivity {
     private void upDataMusicState() {
         mMusicBind.getMusicServiceInstance().hasPlay();
         boolean isPlaying = mMusicBind.getMusicServiceInstance().isPlaying();
-        if(isPlaying){
+        if (isPlaying) {
             mIvPlayingPlay.setImageResource(R.mipmap.play_rdi_btn_pause);
-            handler.sendEmptyMessageDelayed(MUSIC_PLAYING_CURENT_DURATION,1000);
+            handler.sendEmptyMessageDelayed(MUSIC_PLAYING_CURENT_DURATION, 1000);
             mIvNeedle.setRotation(0);
-        }else {
+
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    EventManager.postSomeMessage("pause");
+//                }
+//            }, 2000);
+        } else {
             mIvPlayingPlay.setImageResource(R.mipmap.play_rdi_btn_play);
             handler.removeMessages(MUSIC_PLAYING_CURENT_DURATION);
             mIvNeedle.setRotation(-30);
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    EventManager.postSomeMessage("play");
+//                }
+//            }, 2000);
+
         }
     }
+//    public static boolean getIsplay(){
+//        boolean isPlaying = mMusicBind.getMusicServiceInstance().isPlaying();
+//        return isPlaying;
+//    }
 
 
 
-
-    public  class MusicServiceConnect implements ServiceConnection {
+    public class MusicServiceConnect implements ServiceConnection {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -387,6 +416,7 @@ public class MusicPlay extends BaseActivity {
 
         }
     }
+
     private void pictureDim() {
         Observable.just(picUrl)
                 .subscribeOn(Schedulers.io())
@@ -398,14 +428,32 @@ public class MusicPlay extends BaseActivity {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Bitmap>() {
+                .subscribe(new Subscriber<Bitmap>() {
                     @Override
-                    public void call(Bitmap bitmap) {
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        applyBlur(BitmapFactory.decodeResource(getResources(),R.mipmap.background_default));
+                    }
+
+                    @Override
+                    public void onNext(Bitmap bitmap) {
                         applyBlur(bitmap);
                     }
                 });
+//                .subscribe(new Action1<Bitmap>() {
+//                    @Override
+//                    public void call(Bitmap bitmap) {
+//                        applyBlur(bitmap);
+//                    }
+//                });
     }
+
     private static int radius = 25;
+
     private void applyBlur(Bitmap bitmap) {
         //处理得到模糊效果的图
         RenderScript renderScript = RenderScript.create(App.getAppContext());
@@ -425,15 +473,16 @@ public class MusicPlay extends BaseActivity {
         BitmapDrawable bitmapDrawable = new BitmapDrawable(this.getResources(), bitmap);
         ivAlbumart.setBackground(bitmapDrawable);
     }
+
     private Bitmap getDimBitmap(String url) {
-        if(url==null){
+        if (url == null) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.muiscderault);
             return bitmap;
-        }else {
+        } else {
             FutureTarget<File> fileFutureTarget = Glide.with(this).load(url).downloadOnly(100, 100);
             String mPath;
             FileInputStream mIs = null;
-            try{
+            try {
                 File file = fileFutureTarget.get();
                 mPath = file.getAbsolutePath();
                 mIs = new FileInputStream(mPath);
