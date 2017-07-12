@@ -16,7 +16,7 @@ MVP模式+dagger2+ Glide + Retrofit + RxJava2.0 + butterknife(新人练手项目
 * [SmartRecom](https://github.com/LRH1993/SmartRecom) 音乐API接口 <br>
 上面的开源项目我只放了一部分的功能进我的项目，还有很多很好的知识以及技能我都没用到，想要学习请到这上面的开源项目里去学习！<br>
 #Statement
---------------
+-------------
 该项目仅供交流学习使用，如有侵犯版权问题，可通知本人及时删除<br>
 #Tips
 ----------------
