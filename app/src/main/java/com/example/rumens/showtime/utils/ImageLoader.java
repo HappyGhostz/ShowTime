@@ -75,7 +75,7 @@ public class ImageLoader {
         }
         Glide.with(context).load(url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.mipmap.ic_empty_picture).
+                .error(R.mipmap.background_default).
                 centerCrop().transform(new GlideRoundTransformUtil(context)).into(imageView);
     }
     public static void displayRoundRes(Context context, ImageView imageView, int resId) {
@@ -84,7 +84,7 @@ public class ImageLoader {
         }
         Glide.with(context).load(resId)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.mipmap.ic_empty_picture).
+                .error(R.mipmap.background_default).
                 centerCrop().transform(new GlideRoundTransformUtil(context)).into(imageView);
     }
 

@@ -489,7 +489,7 @@ public class MusicPlay extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Bitmap bitmap = BitmapFactory.decodeStream(mIs);
+             Bitmap bitmap = BitmapFactory.decodeStream(mIs);
             return bitmap;
         }
     }

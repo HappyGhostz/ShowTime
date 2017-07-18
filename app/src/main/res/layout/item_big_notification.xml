@@ -2,8 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#5FE7FF"
     android:id="@+id/rl_notification_layout">
-    <!--android:background="#5FE7FF"-->
+
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -42,6 +43,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:src="@mipmap/play_btn_prev"
+        android:layout_gravity="center_vertical"
          />
     <ImageView
         android:layout_width="0dp"
@@ -49,12 +51,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/iv_notification_playpause"
         android:src="@mipmap/play_rdi_btn_play"
+        android:layout_gravity="center_vertical"
          />
     <ImageView
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:id="@+id/iv_notification_next"
+        android:layout_gravity="center_vertical"
         android:src="@mipmap/play_btn_next"
          />
     </LinearLayout>

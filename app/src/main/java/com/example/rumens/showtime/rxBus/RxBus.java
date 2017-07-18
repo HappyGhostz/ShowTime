@@ -22,6 +22,13 @@ public class RxBus {
     private SerializedSubject<Object, Object> mSubject;
     private HashMap<String, CompositeSubscription> mSubscriptionMap;
 
+    /**
+     *
+     * 1、Subject同时充当了Observer和Observable的角色，Subject是非线程安全的，要避免该问题，
+     * 需要将 Subject转换为一个 SerializedSubject，类中把线程非安全的PublishSubject包装成线程安全的Subject。
+     * 2、PublishSubject只会把在订阅发生的时间点之后来自原始Observable的数据发射给观察者。
+     *
+     */
     public RxBus() {
         mSubject = new SerializedSubject<>(PublishSubject.create());
     }
@@ -54,7 +61,7 @@ public class RxBus {
 
     /**
      * 返回指定类型的Observable实例
-     *
+     * 1、ofType操作符只发射指定类型的数据，其内部就是filter+cast
      * @param type
      * @param <T>
      * @return
@@ -104,6 +111,7 @@ public class RxBus {
         if (mSubscriptionMap.get(key) != null) {
             mSubscriptionMap.get(key).add(subscription);
         } else {
+//            代表一组订阅,订阅 unsubscribed在一起
             CompositeSubscription compositeSubscription = new CompositeSubscription();
             compositeSubscription.add(subscription);
             mSubscriptionMap.put(key, compositeSubscription);
